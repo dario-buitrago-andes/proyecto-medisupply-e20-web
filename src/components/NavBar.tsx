@@ -15,6 +15,9 @@ export default function NavBar() {
                     <Button color="inherit" component={Link} to="/productos">
                         Productos
                     </Button>
+                    <Button color="inherit" component={Link} to="/productos/carga_masiva">
+                        Productos Carga Masiva
+                    </Button>
                     <Button color="inherit" component={Link} to="/planes_venta">
                         Planes de Venta
                     </Button>
