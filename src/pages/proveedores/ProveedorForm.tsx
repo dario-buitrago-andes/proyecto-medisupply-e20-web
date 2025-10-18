@@ -1,0 +1,263 @@
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import {TextField, Button, Box, Checkbox, FormControlLabel, FormLabel} from "@mui/material";
+import { ProveedorService } from "../../services/proveedoresService";
+import { CategoriasSuministrosService, CategoriaSuministro } from "../../services/categoriasSuministrosService";
+import { PaisesService, Pais } from "../../services/paisesService";
+import { CertificacionesService, Certificacion } from "../../services/certificacionesService";
+import { useEffect, useState } from "react";
+import { getApiErrorMessage } from "../../utils/apiError";
+import { useNotify } from "../../components/NotificationProvider";
+
+type ProveedorFormValues = {
+    razon_social: string;
+    paises_operacion: string[];
+    categorias_suministros: number[];
+    capacidad_cadena_frio: string[];
+    certificaciones: number[];
+};
+
+const opcionesCadenaFrio = ["2-8°C", "-20°C", "-80°C", "Ambiente"];
+
+const schema: yup.ObjectSchema<ProveedorFormValues> = yup
+  .object({
+    razon_social: yup.string().trim().required("Razón social obligatoria"),
+    paises_operacion: yup
+      .array()
+      .of(yup.string().required())
+      .default([])
+      .required()
+      .min(1, "Seleccione al menos un país"),
+    categorias_suministros: yup
+      .array()
+      .of(yup.number().required())
+      .default([])
+      .required(),
+    capacidad_cadena_frio: yup
+      .array()
+      .of(yup.string().required())
+      .default([])
+      .required(),
+    certificaciones: yup
+      .array()
+      .of(yup.number().required())
+      .default([])
+      .required()
+      .min(1, "Seleccione al menos una certificación"),
+  })
+  .required();
+
+export default function ProveedorForm() {
+    const { notify } = useNotify();
+    const { control, handleSubmit, formState: { errors } } = useForm<ProveedorFormValues>({
+        resolver: yupResolver(schema),
+        defaultValues: { razon_social: "", paises_operacion: [], categorias_suministros: [], capacidad_cadena_frio: [], certificaciones: [] },
+    });
+    
+    const [paises, setPaises] = useState<Pais[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const [categorias, setCategorias] = useState<CategoriaSuministro[]>([]);
+    const [loadingCategorias, setLoadingCategorias] = useState(true);
+    const [errorCategorias, setErrorCategorias] = useState<string | null>(null);
+    const [certificaciones, setCertificaciones] = useState<Certificacion[]>([]);
+    const [loadingCertificaciones, setLoadingCertificaciones] = useState(true);
+    const [errorCertificaciones, setErrorCertificaciones] = useState<string | null>(null);
+
+    useEffect(() => {
+        const cargarPaises = async () => {
+            try {
+                const response = await PaisesService.listar();
+                setPaises(response.data);
+            } catch (err) {
+                const msg = getApiErrorMessage(err);
+                notify(msg, "error");
+                setError(msg);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        cargarPaises();
+    }, [notify]);
+
+    useEffect(() => {
+        const cargarCategorias = async () => {
+            try {
+                const response = await CategoriasSuministrosService.listar();
+                setCategorias(response.data);
+            } catch (err) {
+                const msg = getApiErrorMessage(err);
+                notify(msg, "error");
+                setErrorCategorias(msg);
+            } finally {
+                setLoadingCategorias(false);
+            }
+        };
+
+        cargarCategorias();
+    }, [notify]);
+
+    useEffect(() => {
+        const cargarCertificaciones = async () => {
+            try {
+                const response = await CertificacionesService.listar();
+                setCertificaciones(response.data);
+            } catch (err) {
+                const msg = getApiErrorMessage(err);
+                notify(msg, "error");
+                setErrorCertificaciones(msg);
+            } finally {
+                setLoadingCertificaciones(false);
+            }
+        };
+
+        cargarCertificaciones();
+    }, [notify]);
+
+    if (loading || loadingCategorias || loadingCertificaciones) return <div>Cargando datos...</div>;
+    if (error || errorCategorias || errorCertificaciones) return <div>{error || errorCategorias || errorCertificaciones}</div>;
+
+    const onSubmit = async (data: any) => {
+        try {
+            await ProveedorService.crear(data);
+            notify("Proveedor registrado", "success");
+        } catch (err) {
+            const msg = getApiErrorMessage(err);
+            notify(msg, "error");
+        }
+    };
+
+    return (
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: 500, m: "auto" }}>
+            <Controller
+                name="razon_social"
+                control={control}
+                render={({ field }) => (
+                    <TextField {...field} label="Razón social" fullWidth margin="normal"
+                               error={!!errors.razon_social} helperText={errors.razon_social?.message} />
+                )}
+            />
+
+            <FormLabel sx={{ mt: 2 }}>Paises de operación</FormLabel>
+            <Controller
+                name="paises_operacion"
+                control={control}
+                render={({ field }) => (
+                    <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
+                        {paises.map((p) => (
+                            <FormControlLabel
+                                key={p.id}
+                                control={
+                                    <Checkbox
+                                        checked={(field.value as string[]).includes(p.id.toString())}
+                                        onChange={(e) => {
+                                            const newValue = e.target.checked
+                                                ? [...(field.value as string[]), p.id.toString()]
+                                                : (field.value as string[]).filter((x: string) => x !== p.id.toString());
+                                            field.onChange(newValue);
+                                        }}
+                                    />
+                                }
+                                label={p.nombre}
+                            />
+                        ))}
+                        {errors.paises_operacion && <p style={{ color: "red" }}>{errors.paises_operacion.message}</p>}
+                    </Box>
+                )}
+            />
+
+            <FormLabel sx={{ mt: 2 }}>Certificaciones sanitarias</FormLabel>
+            <Controller
+                name="certificaciones"
+                control={control}
+                render={({ field }) => (
+                    <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
+                        {certificaciones.map((cert) => (
+                            <FormControlLabel
+                                key={cert.id}
+                                control={
+                                    <Checkbox
+                                        checked={(field.value as number[])?.includes(cert.id) || false}
+                                        onChange={(e) => {
+                                            const checked = e.target.checked;
+                                            const current = (field.value as number[]) || [];
+                                            const newValue = checked
+                                                ? [...current, cert.id]
+                                                : current.filter((v: number) => v !== cert.id);
+                                            field.onChange(newValue);
+                                        }}
+                                    />
+                                }
+                                label={cert.codigo}
+                            />
+                        ))}
+                        {errors.certificaciones && <p style={{ color: "red" }}>{errors.certificaciones.message}</p>}
+                    </Box>
+                )}
+            />
+
+            <FormLabel sx={{ mt: 2 }}>Categorías de suministros</FormLabel>
+            <Controller
+                name="categorias_suministros"
+                control={control}
+                render={({ field }) => (
+                    <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
+                        {categorias.map((c) => (
+                            <FormControlLabel
+                                key={c.id}
+                                control={
+                                    <Checkbox
+                                        checked={(field.value as number[])?.includes(c.id) || false}
+                                        onChange={(e) => {
+                                            const checked = e.target.checked;
+                                            const current = (field.value as number[]) || [];
+                                            const newValue = checked
+                                                ? [...current, c.id]
+                                                : current.filter((v: number) => v !== c.id);
+                                            field.onChange(newValue);
+                                        }}
+                                    />
+                                }
+                                label={c.nombre}
+                            />
+                        ))}
+                    </Box>
+                )}
+            />
+
+            <FormLabel sx={{ mt: 2 }}>Capacidad Cadena de Frio</FormLabel>
+            <Controller
+                name="capacidad_cadena_frio"
+                control={control}
+                render={({ field }) => (
+                    <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
+                        {opcionesCadenaFrio.map((opt) => (
+                            <FormControlLabel
+                                key={opt}
+                                control={
+                                    <Checkbox
+                                        checked={(field.value as string[])?.includes(opt) || false}
+                                        onChange={(e) => {
+                                            const checked = e.target.checked;
+                                            const current = (field.value as string[]) || [];
+                                            const newValue = checked
+                                                ? [...current, opt]
+                                                : current.filter((v: string) => v !== opt);
+                                            field.onChange(newValue);
+                                        }}
+                                    />
+                                }
+                                label={opt}
+                            />
+                        ))}
+                    </Box>
+                )}
+            />
+
+            <Button type="submit" variant="contained">Guardar</Button>
+        </Box>
+    );
+}

@@ -1,4 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
+import { useEffect, useState } from "react";
 import {
     TextField,
     Button,
@@ -9,28 +10,23 @@ import {
     FormControlLabel,
     FormLabel,
     Typography,
+    CircularProgress,
 } from "@mui/material";
 import { ProductoService } from "../../services/productosService";
+import { CertificacionesService, Certificacion } from "../../services/certificacionesService";
+import { ProveedorService } from "../../services/proveedoresService";
+import { useNotify } from "../../components/NotificationProvider";
+import { getApiErrorMessage } from "../../utils/apiError";
 
-const proveedores = ["James Rodriguez", "Luis Diaz", "David Ospina"];
+interface ProveedorItem {
+    id: number;
+    nombre: string;
+}
 
-const certificaciones = [
-    "Registro Sanitario",
-    "Certificado de Buenas Prácticas de Manufactura (BPM/GMP)",
-    "Certificado de Buenas Prácticas de Laboratorio (BPL/GLP)",
-    "Certificado de Buenas Prácticas de Distribución (BPD/GDP)",
-    "Certificado de Análisis de Lote",
-    "Certificado de Farmacovigilancia",
-    "Certificado de Producto Farmacéutico (CPP)",
-    "Certificado de Libre Venta",
-    "Certificado de Cumplimiento Normativo",
-    "Certificado de Estabilidad",
-    "Certificado de Bioequivalencia/Biodisponibilidad",
-    "Certificado de Origen",
-];
+// Las certificaciones ahora se cargarán desde el servicio CertificacionesService
 
 export type ProductoFormData = {
-    proveedor: string;
+    proveedor: number;            // ID del proveedor
     nombre_producto: string;
     sku: string;
     valor_unitario_usd: number;
@@ -53,11 +49,22 @@ export type ProductoFormData = {
     };
 
     valor_unitario: number;        // Mayor que 0
-    certificaciones: string[];     // Lista de certificaciones sanitarias
+    certificaciones: number[];     // IDs de certificaciones sanitarias
     tiempo_entrega_dias: number;   // Entero >= 0
 };
 
 export default function ProductoForm() {
+    const { notify } = useNotify();
+    // Estado y carga de certificaciones desde el API
+    const [certificaciones, setCertificaciones] = useState<Certificacion[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    // Estado y carga de proveedores desde el API
+    const [proveedores, setProveedores] = useState<ProveedorItem[]>([]);
+    const [loadingProveedores, setLoadingProveedores] = useState(true);
+    const [errorProveedores, setErrorProveedores] = useState<string | null>(null);
+
     const {
         register,
         handleSubmit,
@@ -67,7 +74,7 @@ export default function ProductoForm() {
         setValue,
     } = useForm<ProductoFormData>({
         defaultValues: {
-            proveedor: "",
+            proveedor: 0,
             nombre_producto: "",
             sku: "",
             valor_unitario_usd: 0,
@@ -91,9 +98,49 @@ export default function ProductoForm() {
         },
     });
 
+    useEffect(() => {
+        const cargarCertificaciones = async () => {
+            try {
+                const resp = await CertificacionesService.listar();
+                setCertificaciones(resp.data);
+            } catch (e) {
+                const msg = getApiErrorMessage(e);
+                notify(msg, "error");
+                setError(msg);
+            } finally {
+                setLoading(false);
+            }
+        };
+        cargarCertificaciones();
+    }, [notify]);
+
+    useEffect(() => {
+        const cargarProveedores = async () => {
+            try {
+                const resp = await ProveedorService.listar();
+                setProveedores(resp.data);
+            } catch (e) {
+                const msg = getApiErrorMessage(e);
+                notify(msg, "error");
+                setErrorProveedores(msg);
+            } finally {
+                setLoadingProveedores(false);
+            }
+        };
+        cargarProveedores();
+    }, [notify]);
+
+    if (loading || loadingProveedores) return <CircularProgress />;
+    if (error || errorProveedores) return <div>{error || errorProveedores}</div>;
+
     const onSubmit = async (data: any) => {
-        await ProductoService.crear(data);
-        alert("Producto creado");
+        try {
+            await ProductoService.crear(data);
+            notify("Producto creado", "success");
+        } catch (e) {
+            const msg = getApiErrorMessage(e);
+            notify(msg, "error");
+        }
     };
 
     const fichaUrl = watch("ficha_tecnica_url");
@@ -108,15 +155,15 @@ export default function ProductoForm() {
             <TextField
                 select
                 label="Proveedor"
-                {...register("proveedor", { required: "El proveedor es obligatorio" })}
+                {...register("proveedor", { required: "El proveedor es obligatorio", valueAsNumber: true })}
                 fullWidth
                 margin="normal"
                 error={!!errors.proveedor}
                 helperText={errors.proveedor?.message as string}
             >
-                {proveedores.map((p) => (
-                    <MenuItem key={p} value={p}>
-                        {p}
+                {proveedores.map((prov) => (
+                    <MenuItem key={prov.id} value={prov.id}>
+                        {prov.nombre}
                     </MenuItem>
                 ))}
             </TextField>
@@ -222,20 +269,21 @@ export default function ProductoForm() {
                     <FormGroup>
                         {certificaciones.map((cert) => (
                             <FormControlLabel
-                                key={cert}
+                                key={cert.id}
                                 control={
                                     <Checkbox
-                                        checked={(field.value as string[])?.includes(cert) || false}
+                                        checked={(field.value as number[])?.includes(cert.id) || false}
                                         onChange={(e) => {
                                             const checked = e.target.checked;
+                                            const current = (field.value as number[]) || [];
                                             const newValue = checked
-                                                ? [...(field.value || []), cert]
-                                                : field.value.filter((v: string) => v !== cert);
+                                                ? [...current, cert.id]
+                                                : current.filter((v: number) => v !== cert.id);
                                             field.onChange(newValue);
                                         }}
                                     />
                                 }
-                                label={cert}
+                                label={cert.codigo}
                             />
                         ))}
                     </FormGroup>
@@ -259,3 +307,4 @@ export default function ProductoForm() {
         </Box>
     );
 }
+
