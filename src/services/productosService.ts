@@ -9,4 +9,5 @@ export const ProductoService = {
             headers: { "Content-Type": "multipart/form-data" },
         });
     },
+    listar: () => api.get("/productos"),
 };
