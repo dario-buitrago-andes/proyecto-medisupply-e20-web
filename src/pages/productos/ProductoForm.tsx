@@ -22,45 +22,36 @@ interface ProveedorItem {
     id: number;
     nombre: string;
 }
-
-// Las certificaciones ahora se cargarán desde el servicio CertificacionesService
-
 export type ProductoFormData = {
-    proveedor: number;            // ID del proveedor
+    proveedor: number;
     nombre_producto: string;
     sku: string;
     valor_unitario_usd: number;
-
     ficha_tecnica_url: string;
     ficha_tecnica_pdf: File | null;
-
     condiciones: {
-        temperatura: string;       // -80°C, -20°C, 2–8°C, Ambiente, etc.
-        humedad: string;           // Descripción libre
-        luz: string;               // Descripción libre
-        ventilacion: string;       // Descripción libre
-        seguridad: string;         // Descripción libre
-        envase: string;            // Descripción libre
+        temperatura: string;
+        humedad: string;
+        luz: string;
+        ventilacion: string;
+        seguridad: string;
+        envase: string;
     };
-
     organizacion: {
-        tipo_medicamento: string;  // Analgésico, Antibiótico, etc.
-        fecha_vencimiento: string; // yyyy-mm-dd
+        tipo_medicamento: string;
+        fecha_vencimiento: string;
     };
-
-    valor_unitario: number;        // Mayor que 0
-    certificaciones: number[];     // IDs de certificaciones sanitarias
-    tiempo_entrega_dias: number;   // Entero >= 0
+    valor_unitario: number;
+    certificaciones: number[];
+    tiempo_entrega_dias: number;
 };
 
 export default function ProductoForm() {
     const { notify } = useNotify();
-    // Estado y carga de certificaciones desde el API
     const [certificaciones, setCertificaciones] = useState<Certificacion[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Estado y carga de proveedores desde el API
     const [proveedores, setProveedores] = useState<ProveedorItem[]>([]);
     const [loadingProveedores, setLoadingProveedores] = useState(true);
     const [errorProveedores, setErrorProveedores] = useState<string | null>(null);
@@ -148,7 +139,6 @@ export default function ProductoForm() {
 
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: 600, m: "auto" }}>
-            {/* --- Datos básicos --- */}
             <Typography variant="h6" sx={{ mt: 2 }}>Información básica</Typography>
             <TextField label="SKU" {...register("sku")} fullWidth margin="normal" />
             <TextField label="Nombre del producto" {...register("nombre_producto")} fullWidth margin="normal" />
@@ -168,7 +158,6 @@ export default function ProductoForm() {
                 ))}
             </TextField>
 
-            {/* --- Ficha Técnica --- */}
             <Typography variant="h6" sx={{ mt: 3 }}>Ficha Técnica</Typography>
             <TextField
                 label="URL de ficha técnica"
@@ -192,7 +181,6 @@ export default function ProductoForm() {
                 />
             </Button>
 
-            {/* --- Condiciones de almacenamiento --- */}
             <Typography variant="h6" sx={{ mt: 3 }}>Condición de almacenamiento</Typography>
             <TextField
                 select
@@ -215,7 +203,6 @@ export default function ProductoForm() {
             <TextField label="Condiciones de seguridad" {...register("condiciones.seguridad")} fullWidth margin="normal" />
             <TextField label="Condiciones del envase" {...register("condiciones.envase")} fullWidth margin="normal" />
 
-            {/* --- Organización --- */}
             <Typography variant="h6" sx={{ mt: 3 }}>Organización</Typography>
             <TextField
                 select
@@ -246,7 +233,6 @@ export default function ProductoForm() {
                 margin="normal"
             />
 
-            {/* --- Nueva sección: Valor, Certificaciones y Entrega --- */}
             <Typography variant="h6" sx={{ mt: 3 }}>Valor y Certificaciones</Typography>
             <TextField
                 label="Valor unitario (USD)"
