@@ -9,3 +9,5 @@ describe('MediSupply App', () => {
     expect(it).toBeDefined();
   });
 });
+
+export {};
