@@ -1,0 +1,176 @@
+name: 🧪 Tests del Cliente Web
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  actions: read
+  checks: write
+
+jobs:
+  detect-changes:
+    name: 🔍 Detectar cambios en el proyecto
+    runs-on: ubuntu-latest
+    outputs:
+      web-client: ${{ steps.changes.outputs.web-client }}
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detectar cambios en código fuente
+        id: changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            web-client:
+              - 'src/**'
+              - 'public/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig.json'
+          list-files: json
+
+  test-web-client:
+    name: 🧪 Tests Cliente Web
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.web-client == 'true'
+    
+    strategy:
+      matrix:
+        node-version: ['20.x']
+    
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Cache de dependencias Node
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Verificar instalación
+        run: |
+          node --version
+          npm --version
+          echo "✅ Node.js y npm configurados correctamente"
+
+      - name: Ejecutar tests
+        run: npm test -- --coverage --watchAll=false --passWithNoTests
+
+      - name: Verificar build
+        run: npm run build
+
+  report-results:
+    name: 📊 Reporte de Resultados
+    runs-on: ubuntu-latest
+    needs: [detect-changes, test-web-client]
+    if: always() && github.event_name == 'pull_request'
+    steps:
+      - name: Comentar resultados en PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment => 
+              comment.user.login === 'github-actions[bot]' && 
+              comment.body.includes('🧪 Resultados de Tests')
+            );
+
+            const webClientResult = '${{ needs.test-web-client.result }}';
+            const webClientSkipped = '${{ needs.detect-changes.outputs.web-client }}' !== 'true';
+            
+            let body = `## 🧪 Resultados de Tests - Cliente Web\n\n`;
+            body += `### 📋 Componentes Analizados\n\n`;
+            
+            // Web Client
+            if (webClientSkipped) {
+              body += `- **🌐 Cliente Web**: ⏭️ Sin cambios - Tests omitidos\n`;
+            } else if (webClientResult === 'success') {
+              body += `- **🌐 Cliente Web**: ✅ Todos los tests pasaron y build exitoso\n`;
+            } else if (webClientResult === 'failure') {
+              body += `- **🌐 Cliente Web**: ❌ Tests fallaron o build falló\n`;
+            } else {
+              body += `- **🌐 Cliente Web**: ⏳ En progreso o cancelado\n`;
+            }
+            
+            body += `\n### 🎯 Resumen\n\n`;
+            
+            const hasFailures = webClientResult === 'failure';
+            const hasTests = !webClientSkipped;
+            
+            if (!hasTests) {
+              body += `🟡 **No se detectaron cambios** que requieran ejecución de tests.\n\n`;
+              body += `> Los tests se ejecutan automáticamente cuando se modifican archivos en \`src/\`, \`public/\` o archivos de configuración.\n`;
+            } else if (hasFailures) {
+              body += `🔴 **Algunos tests fallaron** - El merge está bloqueado hasta que se corrijan los errores.\n\n`;
+            } else {
+              body += `🟢 **Todos los tests pasaron** - El PR está listo para revisión y merge.\n\n`;
+            }
+            
+            body += `\n---\n`;
+            body += `*🤖 Este comentario se actualiza automáticamente en cada push*`;
+
+            if (botComment) {
+              github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+
+  check-overall-status:
+    name: ✅ Estado General
+    runs-on: ubuntu-latest
+    needs: [detect-changes, test-web-client]
+    if: always()
+    steps:
+      - name: Verificar estado general
+        run: |
+          echo "🔍 Verificando estado general de los tests..."
+          
+          WEB_CLIENT_RESULT="${{ needs.test-web-client.result }}"
+          WEB_CLIENT_NEEDED="${{ needs.detect-changes.outputs.web-client }}"
+          
+          # Verificar si hay fallos
+          if [[ "$WEB_CLIENT_NEEDED" == "true" && "$WEB_CLIENT_RESULT" != "success" ]]; then
+            echo "❌ Web Client tests failed or were cancelled"
+            exit 1
+          fi
+          
+          echo "✅ Todos los tests requeridos pasaron exitosamente"
+
