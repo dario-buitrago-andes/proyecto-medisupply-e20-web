@@ -12,7 +12,7 @@ import { useNotify } from "../../components/NotificationProvider";
 
 type ProveedorFormValues = {
     razon_social: string;
-    paises_operacion: string[];
+    paises_operacion: number[];
     categorias_suministros: number[];
     capacidad_cadena_frio: string[];
     certificaciones: number[];
@@ -25,7 +25,7 @@ const schema: yup.ObjectSchema<ProveedorFormValues> = yup
     razon_social: yup.string().trim().required("Razón social obligatoria"),
     paises_operacion: yup
       .array()
-      .of(yup.string().required())
+      .of(yup.number().required())
       .default([])
       .required()
       .min(1, "Seleccione al menos un país"),
@@ -152,11 +152,12 @@ export default function ProveedorForm() {
                                 key={p.id}
                                 control={
                                     <Checkbox
-                                        checked={(field.value as string[]).includes(p.id.toString())}
+                                        checked={(field.value as number[]).includes(p.id)}
                                         onChange={(e) => {
+                                            const current = (field.value as number[]) || [];
                                             const newValue = e.target.checked
-                                                ? [...(field.value as string[]), p.id.toString()]
-                                                : (field.value as string[]).filter((x: string) => x !== p.id.toString());
+                                                ? [...current, p.id]
+                                                : current.filter((x: number) => x !== p.id);
                                             field.onChange(newValue);
                                         }}
                                     />
