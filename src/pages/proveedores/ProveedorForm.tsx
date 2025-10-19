@@ -141,7 +141,7 @@ export default function ProveedorForm() {
                 )}
             />
 
-            <FormLabel sx={{ mt: 2 }}>Paises de operación</FormLabel>
+            <FormLabel sx={{ mt: 2 }}>Países de operación</FormLabel>
             <Controller
                 name="paises_operacion"
                 control={control}

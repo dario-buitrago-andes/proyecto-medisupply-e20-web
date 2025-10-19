@@ -1,11 +1,18 @@
 import { AppBar, Toolbar, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function NavBar() {
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+    };
+
     return (
         <AppBar position="static" sx={{ mb: 4 }}>
             <Toolbar>
-                <Box sx={{ display: "flex", gap: 2 }}>
+                <Box sx={{ display: "flex", gap: 2, flexGrow: 1 }}>
                     <Button color="inherit" component={Link} to="/vendedores">
                         Vendedores
                     </Button>
@@ -22,6 +29,13 @@ export default function NavBar() {
                         Planes de Venta
                     </Button>
                 </Box>
+                <Button 
+                    color="inherit" 
+                    onClick={handleLogout}
+                    sx={{ ml: "auto" }}
+                >
+                    Cerrar Sesión
+                </Button>
             </Toolbar>
         </AppBar>
     );
