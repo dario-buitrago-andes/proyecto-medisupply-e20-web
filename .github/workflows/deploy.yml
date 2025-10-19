@@ -1,0 +1,58 @@
+name: 🚀 Deploy a Firebase Hosting
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: 🚀 Deploy a Producción
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Cache de dependencias
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar tests
+        run: npm test -- --coverage --watchAll=false
+
+      - name: Build de producción
+        run: npm run build
+        env:
+          CI: true
+          REACT_APP_API_DOMAIN: ${{ secrets.REACT_APP_API_DOMAIN }}
+
+      - name: Deploy a Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          channelId: live
+          projectId: proyecto-medisupply-e20
+
+      - name: Notificar éxito
+        if: success()
+        run: |
+          echo "✅ Deploy exitoso a Firebase Hosting"
+          echo "🌐 URL: https://proyecto-medisupply-e20.web.app"
+
