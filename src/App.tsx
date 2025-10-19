@@ -1,16 +1,37 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import NavBar from "./components/NavBar";
+import { ThemeProvider } from "@mui/material/styles";
+import Layout from "./components/Layout";
 import AppRoutes from "./routes/AppRoutes";
 import { NotificationProvider } from "./components/NotificationProvider";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import Login from "./pages/auth/Login";
+import theme from "./theme/theme";
+
+function AppContent() {
+    const { isAuthenticated, login } = useAuth();
+
+    if (!isAuthenticated) {
+        return <Login onLoginSuccess={login} />;
+    }
+
+    return (
+        <Layout>
+            <AppRoutes />
+        </Layout>
+    );
+}
 
 function App() {
     return (
-        <NotificationProvider>
-            <Router>
-                <NavBar />
-                <AppRoutes />
-            </Router>
-        </NotificationProvider>
+        <ThemeProvider theme={theme}>
+            <NotificationProvider>
+                <AuthProvider>
+                    <Router>
+                        <AppContent />
+                    </Router>
+                </AuthProvider>
+            </NotificationProvider>
+        </ThemeProvider>
     );
 }
 
