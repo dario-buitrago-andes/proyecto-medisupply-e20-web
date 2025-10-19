@@ -1,4 +1,20 @@
-# Getting Started with Create React App
+# 🏥 MediSupply E20 - Cliente Web
+
+Sistema de gestión de suministros médicos. Proyecto desarrollado con React + TypeScript + Material-UI.
+
+## 🚀 CI/CD
+
+Este proyecto cuenta con integración continua y deploy automático:
+
+- **🧪 Tests Automáticos**: Se ejecutan en cada PR hacia `main` o `develop`
+- **🚀 Deploy Automático**: Se despliega a Firebase Hosting cuando se hace merge a `main`
+
+### GitHub Actions Workflows
+
+- **`.github/workflows/tests.yml`**: Ejecuta tests y build en cada PR
+- **`.github/workflows/deploy.yml`**: Deploy automático a Firebase Hosting (solo en `main`)
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -39,8 +55,50 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## 🔥 Firebase Hosting
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**URL de Producción:** `https://proyecto-medisupply-e20.web.app`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+## 🧪 Testing
+
+```bash
+# Ejecutar tests
+npm test
+
+# Ejecutar tests con coverage
+npm test -- --coverage --watchAll=false
+```
+
+**Test Suites:**
+- `src/utils/apiError.test.ts` - Tests de utilidades de manejo de errores
+- `src/App.test.tsx` - Tests de infraestructura básica
+
+---
+
+## 🏗️ Estructura del Proyecto
+
+```
+src/
+├── components/          # Componentes reutilizables
+│   ├── NavBar.tsx      # Barra de navegación
+│   └── NotificationProvider.tsx  # Sistema de notificaciones
+├── pages/              # Páginas de la aplicación
+│   ├── vendedores/     # Gestión de vendedores
+│   ├── proveedores/    # Gestión de proveedores
+│   ├── productos/      # Gestión de productos
+│   └── planes_venta/   # Planes de venta
+├── services/           # Servicios de API
+├── routes/            # Configuración de rutas
+└── utils/            # Utilidades
+```
+
+---
+
+## 📚 Learn More
+
+- [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
+- [React documentation](https://reactjs.org/)
+- [Material-UI documentation](https://mui.com/)
+- [Firebase Hosting documentation](https://firebase.google.com/docs/hosting)
