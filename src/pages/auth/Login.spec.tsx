@@ -59,7 +59,7 @@ describe("Login", () => {
       expect(emailInput.type).toBe("email");
       expect(emailInput.id).toBe("email");
       expect(emailInput.required).toBe(true);
-      expect(emailInput.placeholder).toBe("tu@email.com");
+      expect(emailInput.placeholder).toBe("tu@email-sustentacion.com");
       expect(emailInput.getAttribute("autocomplete")).toBe("email");
     });
 

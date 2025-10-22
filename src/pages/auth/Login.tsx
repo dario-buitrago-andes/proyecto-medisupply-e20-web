@@ -46,7 +46,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
-              placeholder="tu@email.com"
+              placeholder="tu@email-sustentacion.com"
               disabled={loading}
             />
           </div>
