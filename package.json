@@ -30,6 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:integration": "react-scripts test --testPathPattern=integration --no-watch",
+    "test:coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -52,7 +54,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-router|react-router-dom|@remix-run)/)"
+      "node_modules/(?!(react-router|react-router-dom|@remix-run|axios)/)"
     ]
   }
 }
