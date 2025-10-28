@@ -9,7 +9,9 @@ Las pruebas de integración usan el **mock de Postman** (`https://87b3e5ff-1f15-
 ## Archivos Clave
 
 - **`src/integration/auth.integration.test.tsx`**: Tests de flujo de autenticación
-- **`src/integration/services.integration.test.tsx`**: Tests de servicios con API
+- **`src/integration/services.integration.test.tsx`**: Tests de servicios principales (Productos, Vendedores, Proveedores, Auth, Interceptores)
+- **`src/integration/services.catalogos.integration.test.tsx`**: Tests de servicios de catálogos (Categorías, Certificaciones, Países)
+- **`src/integration/services.planesVenta.integration.test.tsx`**: Tests de planes de venta
 
 ## 🚀 Ejecutar Pruebas de Integración
 
@@ -43,27 +45,37 @@ Prueba el flujo completo de autenticación:
 - ✅ Logout después de login exitoso
 - ✅ Persistencia de autenticación en localStorage
 
-### 2. `services.integration.test.tsx` ✅ (8 tests)
-Prueba la integración de servicios con la API:
+### 2. `services.integration.test.tsx` ✅ (6 tests)
+Prueba la integración de servicios principales con la API:
 - ✅ AuthService - Login y guardado de token (maneja rate limit)
 - ✅ AuthService - Manejo de intentos de login
 - ✅ AuthService - Verificación de autenticación
 - ✅ ProductoService - Listar productos (maneja rate limit)
 - ✅ VendedorService - Listar vendedores (maneja rate limit)
-- ✅ ProveedorService - Listar proveedores (maneja rate limit)
-- ✅ CategoriasSuministrosService - Listar categorías (maneja rate limit)
 - ✅ Interceptores de Axios - Token en peticiones
+
+### 3. `services.catalogos.integration.test.tsx` ✅ (3 tests)
+Prueba la integración de servicios de catálogos:
+- ✅ CategoriasSuministrosService - Listar categorías (maneja rate limit)
+- ✅ CertificacionesService - Listar certificaciones (maneja rate limit)
+- ✅ PaisesService - Listar países (maneja rate limit)
+
+### 4. `services.planesVenta.integration.test.tsx` ✅ (2 tests)
+Prueba la integración del servicio de Planes de Venta:
+- ✅ PlanVentaService - Método crear configurado
+- ✅ PlanVentaService - Creación de planes de venta (maneja rate limit y autenticación)
 
 ## ➕ Agregar Nuevos Tests de Integración
 
 Para agregar nuevos tests de integración:
 
-1. Crea un archivo en `src/integration/` con el patrón `*.integration.test.tsx`
+1. Crea un archivo en `src/integration/` con el patrón:
+   - `*.integration.test.tsx` para tests generales
+   - `*.catalogos.integration.test.tsx` para tests de catálogos
 
 2. Escribe tus tests usando React Testing Library:
 
 ```tsx
-import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 describe('Tu Test de Integración', () => {
@@ -78,6 +90,13 @@ describe('Tu Test de Integración', () => {
 });
 ```
 
+## 📁 Estructura de Archivos de Tests
+
+- `auth.integration.test.tsx` - Tests de autenticación (3 tests)
+- `services.integration.test.tsx` - Tests de servicios principales (6 tests)
+- `services.catalogos.integration.test.tsx` - Tests de catálogos (3 tests)
+- `services.planesVenta.integration.test.tsx` - Tests de planes de venta (2 tests)
+
 ## 🎓 Recursos
 
 - [React Testing Library](https://testing-library.com/react)
@@ -86,18 +105,18 @@ describe('Tu Test de Integración', () => {
 ## ✅ Estado de las Pruebas
 
 ```
-Test Suites: 2 passed, 2 total
-Tests:       11 passed, 11 total
-Time:        ~5-6 s
+Test Suites: 4 passed, 4 total
+Tests:       15 passed, 15 total
+Time:        ~6-7 s
 ```
 
 ### ✅ Todos los Tests Pasando
 
-**11 tests activos** que verifican:
+**15 tests activos** que verifican:
 - ✅ Flujo de autenticación completo
 - ✅ Login y logout exitosos (con manejo de rate limit)
 - ✅ Persistencia de autenticación
-- ✅ Listado de productos, vendedores, proveedores y categorías (con manejo de rate limit)
+- ✅ Listado de productos, vendedores, proveedores, categorías, certificaciones y países (con manejo de rate limit)
 - ✅ Integración de servicios con API
 - ✅ Interceptores de Axios
 

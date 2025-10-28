@@ -10,7 +10,6 @@ import '@testing-library/jest-dom';
 import { ProductoService } from '../services/productosService';
 import { VendedorService } from '../services/vendedoresService';
 import { ProveedorService } from '../services/proveedoresService';
-import { CategoriasSuministrosService } from '../services/categoriasSuministrosService';
 import authService from '../services/authService';
 
 describe('Integración - Servicios con API', () => {
@@ -138,33 +137,6 @@ describe('Integración - Servicios con API', () => {
       }
     });
 
-  });
-
-  describe('Categorías Suministros Service - Integración completa', () => {
-    it('debe listar categorías de suministros', async () => {
-      try {
-        const response = await CategoriasSuministrosService.listar();
-        expect(response.data).toBeDefined();
-        expect(Array.isArray(response.data)).toBe(true);
-        expect(response.data.length).toBeGreaterThan(0);
-        
-        // Verificar estructura de las categorías
-        const primeraCategoria = response.data[0];
-        expect(primeraCategoria).toBeDefined();
-        expect(typeof primeraCategoria).toBe('object');
-        
-        // Si la estructura está disponible, verificar campos
-        if (primeraCategoria.id !== undefined) {
-          expect(typeof primeraCategoria.id).toBe('number');
-        }
-        if (primeraCategoria.nombre !== undefined) {
-          expect(typeof primeraCategoria.nombre).toBe('string');
-        }
-      } catch (error: any) {
-        // Rate limit del mock de Postman (429) es aceptable - test pasa
-        expect(error?.response?.status).toBe(429);
-      }
-    });
   });
 
   describe('Interceptores de Axios - Integración', () => {
