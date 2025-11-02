@@ -1,7 +1,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {TextField, Button, Box, Checkbox, FormControlLabel, FormLabel} from "@mui/material";
+import {TextField, Button, Box, Checkbox, FormControlLabel, FormLabel, Typography} from "@mui/material";
 import { ProveedorService } from "../../services/proveedoresService";
 import { CategoriasSuministrosService, CategoriaSuministro } from "../../services/categoriasSuministrosService";
 import { PaisesService, Pais } from "../../services/paisesService";
@@ -13,9 +13,9 @@ import { useNotify } from "../../components/NotificationProvider";
 type ProveedorFormValues = {
     razon_social: string;
     paises_operacion: number[];
-    categorias_suministros: number[];
+    categorias_suministradas: number[];
     capacidad_cadena_frio: string[];
-    certificaciones: number[];
+    certificaciones_sanitarias: number[];
 };
 
 const opcionesCadenaFrio = ["2-8°C", "-20°C", "-80°C", "Ambiente"];
@@ -29,7 +29,7 @@ const schema: yup.ObjectSchema<ProveedorFormValues> = yup
       .default([])
       .required()
       .min(1, "Seleccione al menos un país"),
-    categorias_suministros: yup
+      categorias_suministradas: yup
       .array()
       .of(yup.number().required())
       .default([])
@@ -39,7 +39,7 @@ const schema: yup.ObjectSchema<ProveedorFormValues> = yup
       .of(yup.string().required())
       .default([])
       .required(),
-    certificaciones: yup
+    certificaciones_sanitarias: yup
       .array()
       .of(yup.number().required())
       .default([])
@@ -52,7 +52,7 @@ export default function ProveedorForm() {
     const { notify } = useNotify();
     const { control, handleSubmit, formState: { errors } } = useForm<ProveedorFormValues>({
         resolver: yupResolver(schema),
-        defaultValues: { razon_social: "", paises_operacion: [], categorias_suministros: [], capacidad_cadena_frio: [], certificaciones: [] },
+        defaultValues: { razon_social: "", paises_operacion: [], categorias_suministradas: [], capacidad_cadena_frio: [], certificaciones_sanitarias: [] },
     });
     
     const [paises, setPaises] = useState<Pais[]>([]);
@@ -132,6 +132,10 @@ export default function ProveedorForm() {
 
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: 500, m: "auto" }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3, textAlign: 'center' }}>
+                Registrar Proveedor
+            </Typography>
+
             <Controller
                 name="razon_social"
                 control={control}
@@ -172,7 +176,7 @@ export default function ProveedorForm() {
 
             <FormLabel sx={{ mt: 2 }}>Certificaciones sanitarias</FormLabel>
             <Controller
-                name="certificaciones"
+                name="certificaciones_sanitarias"
                 control={control}
                 render={({ field }) => (
                     <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
@@ -195,14 +199,14 @@ export default function ProveedorForm() {
                                 label={cert.codigo}
                             />
                         ))}
-                        {errors.certificaciones && <p style={{ color: "red" }}>{errors.certificaciones.message}</p>}
+                        {errors.certificaciones_sanitarias && <p style={{ color: "red" }}>{errors.certificaciones_sanitarias.message}</p>}
                     </Box>
                 )}
             />
 
             <FormLabel sx={{ mt: 2 }}>Categorías de suministros</FormLabel>
             <Controller
-                name="categorias_suministros"
+                name="categorias_suministradas"
                 control={control}
                 render={({ field }) => (
                     <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>

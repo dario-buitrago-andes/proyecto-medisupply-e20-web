@@ -67,8 +67,8 @@ function setupDefaultMocks() {
 
   mockProductosListar.mockResolvedValue({
     data: [
-      { id: 5, nombre: "Guantes" },
-      { id: 6, nombre: "Mascarillas" },
+      { id: 5, nombre_producto: "Guantes" },
+      { id: 6, nombre_producto: "Mascarillas" },
     ],
   });
 
@@ -83,6 +83,16 @@ describe("PlanVentaForm", () => {
     // Resetear y configurar mocks antes de cada test
     jest.clearAllMocks();
     setupDefaultMocks();
+  });
+
+  describe("Renderizado del título", () => {
+    it("muestra el título 'Registrar Plan de Venta'", async () => {
+      renderWithProviders();
+
+      // Verificar que el título está presente
+      const titulo = screen.getByRole("heading", { name: /Registrar Plan de Venta/i, level: 1 });
+      expect(titulo).toBeInTheDocument();
+    });
   });
 
   describe("Carga inicial y datos desde API", () => {
