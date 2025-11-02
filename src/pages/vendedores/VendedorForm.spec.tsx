@@ -70,7 +70,7 @@ describe("VendedorForm", () => {
       
       // Verificar que el input de país no está deshabilitado después de cargar
       await waitFor(() => {
-        const paisInput = document.querySelector('input[name="pais_id"]') as HTMLInputElement;
+        const paisInput = document.querySelector('input[name="pais"]') as HTMLInputElement;
         expect(paisInput).not.toBeDisabled();
       });
     });
@@ -78,7 +78,7 @@ describe("VendedorForm", () => {
     it("deshabilita el select de país mientras carga", () => {
       renderWithProviders();
 
-      const paisInput = document.querySelector('input[name="pais_id"]') as HTMLInputElement;
+      const paisInput = document.querySelector('input[name="pais"]') as HTMLInputElement;
 
       // Debería estar deshabilitado inicialmente
       expect(paisInput).toBeDisabled();
@@ -90,7 +90,7 @@ describe("VendedorForm", () => {
       // Esperar a que termine la carga
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
-      const paisInput = document.querySelector('input[name="pais_id"]') as HTMLInputElement;
+      const paisInput = document.querySelector('input[name="pais"]') as HTMLInputElement;
 
       // Debería estar habilitado después de cargar
       await waitFor(() => {
@@ -119,8 +119,8 @@ describe("VendedorForm", () => {
 
       const estadoInput = document.querySelector('input[name="estado"]') as HTMLInputElement;
 
-      // El valor por defecto debería ser "Activo"
-      expect(estadoInput?.value).toBe("Activo");
+      // El valor por defecto debería ser "ACTIVO"
+      expect(estadoInput?.value).toBe("ACTIVO");
     });
 
     it("permite cambiar el estado a Inactivo", async () => {
@@ -141,7 +141,7 @@ describe("VendedorForm", () => {
       // Verificar cambio
       const estadoInput = document.querySelector('input[name="estado"]') as HTMLInputElement;
       await waitFor(() => {
-        expect(estadoInput?.value).toBe("Inactivo");
+        expect(estadoInput?.value).toBe("INACTIVO");
       });
     });
   });
@@ -207,7 +207,7 @@ describe("VendedorForm", () => {
 
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "Juan123");
 
       const submitBtn = screen.getByRole("button", { name: /Guardar/i });
@@ -221,7 +221,7 @@ describe("VendedorForm", () => {
 
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "José María Núñez");
 
       // Seleccionar país
@@ -250,7 +250,7 @@ describe("VendedorForm", () => {
 
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
 
       // Intentar solo espacios
       await userEvent.type(nombreInput, "   ");
@@ -288,7 +288,7 @@ describe("VendedorForm", () => {
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
       // Verificar que el input del país está habilitado
-      const paisInput = document.querySelector('input[name="pais_id"]') as HTMLInputElement;
+      const paisInput = document.querySelector('input[name="pais"]') as HTMLInputElement;
       await waitFor(() => {
         expect(paisInput).not.toBeDisabled();
       });
@@ -302,7 +302,7 @@ describe("VendedorForm", () => {
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
       // Llenar nombre
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "María Fernanda García");
 
       // Llenar email
@@ -331,10 +331,10 @@ describe("VendedorForm", () => {
 
       // Verificar estructura del payload
       const payload = mockVendedorCrear.mock.calls[0][0];
-      expect(payload.nombre_completo).toBe("María Fernanda García");
+      expect(payload.nombre).toBe("María Fernanda García");
       expect(payload.email).toBe("maria.garcia@empresa.com");
-      expect(payload.pais_id).toBe(1);
-      expect(payload.estado).toBe("Activo");
+      expect(payload.pais).toBe(1);
+      expect(payload.estado).toBe("ACTIVO");
     });
 
     it("permite crear vendedor con estado Inactivo", async () => {
@@ -343,7 +343,7 @@ describe("VendedorForm", () => {
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
       // Llenar campos
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "Pedro López");
 
       const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
@@ -371,10 +371,10 @@ describe("VendedorForm", () => {
 
       // Verificar payload
       const payload = mockVendedorCrear.mock.calls[0][0];
-      expect(payload.nombre_completo).toBe("Pedro López");
+      expect(payload.nombre).toBe("Pedro López");
       expect(payload.email).toBe("pedro@empresa.com");
-      expect(payload.pais_id).toBe(3);
-      expect(payload.estado).toBe("Inactivo");
+      expect(payload.pais).toBe(3);
+      expect(payload.estado).toBe("INACTIVO");
     });
 
     it("muestra notificación de éxito al crear vendedor", async () => {
@@ -383,7 +383,7 @@ describe("VendedorForm", () => {
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
       // Llenar campos mínimos
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "Ana Torres");
 
       const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
@@ -412,7 +412,7 @@ describe("VendedorForm", () => {
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
       // Llenar campos
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "Carlos Ruiz");
 
       const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;
@@ -439,7 +439,7 @@ describe("VendedorForm", () => {
 
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "Juan 2023");
 
       const submitBtn = screen.getByRole("button", { name: /Guardar/i });
@@ -453,7 +453,7 @@ describe("VendedorForm", () => {
 
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "Juan@#$");
 
       const submitBtn = screen.getByRole("button", { name: /Guardar/i });
@@ -467,7 +467,7 @@ describe("VendedorForm", () => {
 
       await waitFor(() => expect(mockPaisesListar).toHaveBeenCalled());
 
-      const nombreInput = document.querySelector('input[name="nombre_completo"]') as HTMLInputElement;
+      const nombreInput = document.querySelector('input[name="nombre"]') as HTMLInputElement;
       await userEvent.type(nombreInput, "Juan Pérez");
 
       const emailInput = document.querySelector('input[name="email"]') as HTMLInputElement;

@@ -10,6 +10,7 @@ import {
     Checkbox,
     ListItemText,
     OutlinedInput,
+    Typography,
 } from "@mui/material";
 import { PlanVentaService } from "../../services/planesVentaService";
 import { useEffect, useState } from "react";
@@ -22,7 +23,7 @@ import { getApiErrorMessage } from "../../utils/apiError";
 const periodos = ["Q1", "Q2", "Q3", "Q4"];
 
 type VendedorItem = { id: number; nombre: string; estado: string };
-type ProductoItem = { id: number; nombre: string };
+type ProductoItem = { id: number; nombre_producto: string };
 
 
 
@@ -59,7 +60,7 @@ export default function PlanVentaForm() {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            vendedor: 0,
+            vendedor_id: 0,
             periodo: "",
             anio: new Date().getFullYear(),
             pais: 0,
@@ -87,18 +88,21 @@ export default function PlanVentaForm() {
             onSubmit={handleSubmit(onSubmit)}
             sx={{ maxWidth: 500, m: "auto", p: 2, display: "flex", flexDirection: "column" }}
         >
+            <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3, textAlign: 'center' }}>
+                Registrar Plan de Venta
+            </Typography>
             {/* Vendedor */}
             <TextField
                 select
                 label="Vendedor"
-                {...register("vendedor", {
+                {...register("vendedor_id", {
                     valueAsNumber: true,
                     validate: (v) => (Number(v) > 0) || "El vendedor es obligatorio",
                 })}
                 fullWidth
                 margin="normal"
-                error={!!errors.vendedor}
-                helperText={errors.vendedor?.message as string}
+                error={!!errors.vendedor_id}
+                helperText={errors.vendedor_id?.message as string}
             >
                 <MenuItem value={0} disabled>
                     Selecciona un vendedor
@@ -186,12 +190,12 @@ export default function PlanVentaForm() {
                             {...field}
                             multiple
                             input={<OutlinedInput label="Productos objetivo" />}
-                            renderValue={(selected) => (selected as number[]).map(id => productos.find(p => p.id === id)?.nombre || id).join(", ")}
+                            renderValue={(selected) => (selected as number[]).map(id => productos.find(p => p.id === id)?.nombre_producto || id).join(", ")}
                         >
                             {productos.map((p) => (
                                 <MenuItem key={p.id} value={p.id}>
                                     <Checkbox checked={(field.value as number[]).includes(p.id)} />
-                                    <ListItemText primary={p.nombre} />
+                                    <ListItemText primary={p.nombre_producto} />
                                 </MenuItem>
                             ))}
                         </Select>
