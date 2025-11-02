@@ -87,6 +87,18 @@ describe("ProveedorForm", () => {
     setupDefaultMocks();
   });
 
+  describe("Renderizado del título", () => {
+    it("muestra el título 'Registrar Proveedor'", async () => {
+      renderWithProviders();
+
+      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+
+      // Verificar que el título está presente
+      const titulo = screen.getByRole("heading", { name: /Registrar Proveedor/i, level: 1 });
+      expect(titulo).toBeInTheDocument();
+    });
+  });
+
   describe("Estados de carga inicial", () => {
     it("muestra mensaje de carga mientras obtiene datos", () => {
       renderWithProviders();
@@ -382,7 +394,7 @@ describe("ProveedorForm", () => {
 
       // Verificar que no se seleccionaron categorías en el payload
       const payload = mockProveedorCrear.mock.calls[0][0];
-      expect(payload.categorias_suministros).toEqual([]);
+      expect(payload.categorias_suministradas).toEqual([]);
     });
   });
 
@@ -482,7 +494,7 @@ describe("ProveedorForm", () => {
       const payload = mockProveedorCrear.mock.calls[0][0];
       expect(payload.razon_social).toBe("Distribuidora MediSupply S.A.");
       expect(payload.paises_operacion).toEqual([1, 2]);
-      expect(payload.certificaciones).toEqual([10, 20]);
+      expect(payload.certificaciones_sanitarias).toEqual([10, 20]);
     });
 
     it("permite completar el formulario con todos los campos", async () => {
@@ -523,8 +535,8 @@ describe("ProveedorForm", () => {
       const payload = mockProveedorCrear.mock.calls[0][0];
       expect(payload.razon_social).toBe("Proveedor Completo Ltda.");
       expect(payload.paises_operacion).toEqual([1, 3]);
-      expect(payload.certificaciones).toEqual([10, 30]);
-      expect(payload.categorias_suministros).toEqual([100, 200]);
+      expect(payload.certificaciones_sanitarias).toEqual([10, 30]);
+      expect(payload.categorias_suministradas).toEqual([100, 200]);
       expect(payload.capacidad_cadena_frio).toEqual(["2-8°C", "-20°C"]);
     });
 

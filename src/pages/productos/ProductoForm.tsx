@@ -20,15 +20,14 @@ import { getApiErrorMessage } from "../../utils/apiError";
 
 interface ProveedorItem {
     id: number;
-    nombre: string;
+    razon_social: string;
 }
 export type ProductoFormData = {
-    proveedor: number;
+    proveedor_id: number;
     nombre_producto: string;
     sku: string;
     valor_unitario_usd: number;
     ficha_tecnica_url: string;
-    ficha_tecnica_pdf: File | null;
     condiciones: {
         temperatura: string;
         humedad: string;
@@ -41,7 +40,6 @@ export type ProductoFormData = {
         tipo_medicamento: string;
         fecha_vencimiento: string;
     };
-    valor_unitario: number;
     certificaciones: number[];
     tiempo_entrega_dias: number;
 };
@@ -61,16 +59,13 @@ export default function ProductoForm() {
         handleSubmit,
         control,
         formState: { errors },
-        watch,
-        setValue,
     } = useForm<ProductoFormData>({
         defaultValues: {
-            proveedor: 0,
+            proveedor_id: 0,
             nombre_producto: "",
             sku: "",
             valor_unitario_usd: 0,
             ficha_tecnica_url: "",
-            ficha_tecnica_pdf: null,
             condiciones: {
                 temperatura: "",
                 humedad: "",
@@ -83,7 +78,6 @@ export default function ProductoForm() {
                 tipo_medicamento: "",
                 fecha_vencimiento: "",
             },
-            valor_unitario: 0,
             certificaciones: [],
             tiempo_entrega_dias: 0,
         },
@@ -134,26 +128,27 @@ export default function ProductoForm() {
         }
     };
 
-    const fichaUrl = watch("ficha_tecnica_url");
-    const fichaPdf = watch("ficha_tecnica_pdf");
-
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: 600, m: "auto" }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3, textAlign: 'center' }}>
+                Registrar Producto
+            </Typography>
+
             <Typography variant="h6" sx={{ mt: 2 }}>Información básica</Typography>
             <TextField label="SKU" {...register("sku")} fullWidth margin="normal" />
             <TextField label="Nombre del producto" {...register("nombre_producto")} fullWidth margin="normal" />
             <TextField
                 select
                 label="Proveedor"
-                {...register("proveedor", { required: "El proveedor es obligatorio", valueAsNumber: true })}
+                {...register("proveedor_id", { required: "El proveedor es obligatorio", valueAsNumber: true })}
                 fullWidth
                 margin="normal"
-                error={!!errors.proveedor}
-                helperText={errors.proveedor?.message as string}
+                error={!!errors.proveedor_id}
+                helperText={errors.proveedor_id?.message as string}
             >
                 {proveedores.map((prov) => (
                     <MenuItem key={prov.id} value={prov.id}>
-                        {prov.nombre}
+                        {prov.razon_social}
                     </MenuItem>
                 ))}
             </TextField>
@@ -164,22 +159,7 @@ export default function ProductoForm() {
                 {...register("ficha_tecnica_url")}
                 fullWidth
                 margin="normal"
-                disabled={!!fichaPdf}
             />
-            <Button
-                variant="outlined"
-                component="label"
-                disabled={!!fichaUrl}
-                sx={{ mb: 2 }}
-            >
-                Subir PDF
-                <input
-                    type="file"
-                    hidden
-                    accept="application/pdf"
-                    onChange={(e) => setValue("ficha_tecnica_pdf", (e.target.files?.[0] as unknown as File | null) || null)}
-                />
-            </Button>
 
             <Typography variant="h6" sx={{ mt: 3 }}>Condición de almacenamiento</Typography>
             <TextField
@@ -192,7 +172,7 @@ export default function ProductoForm() {
                 {Array.from({ length: 89 }, (_, i) => -80 + i)
                     .filter(t => t <= 8)
                     .map(temp => (
-                        <MenuItem key={temp} value={temp}>
+                        <MenuItem key={temp} value={String(temp)}>
                             {temp}°C
                         </MenuItem>
                     ))}
@@ -237,14 +217,14 @@ export default function ProductoForm() {
             <TextField
                 label="Valor unitario (USD)"
                 type="number"
-                {...register("valor_unitario", {
+                {...register("valor_unitario_usd", {
                     required: "El valor unitario es obligatorio",
                     min: { value: 0.01, message: "Debe ser mayor a cero" },
                 })}
                 fullWidth
                 margin="normal"
-                error={!!errors.valor_unitario}
-                helperText={errors.valor_unitario?.message as string}
+                error={!!errors.valor_unitario_usd}
+                helperText={errors.valor_unitario_usd?.message as string}
             />
 
             <FormLabel sx={{ mt: 2 }}>Certificaciones sanitarias</FormLabel>

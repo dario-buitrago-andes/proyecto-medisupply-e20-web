@@ -14,7 +14,7 @@ const TOKEN_KEY = "access_token";
 export const authService = {
   // Login y guardar token
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>("/token", credentials);
+    const response = await api.post<LoginResponse>("/users/generate-token", credentials);
     const { access_token } = response.data;
     
     // Guardar token en localStorage

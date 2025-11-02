@@ -54,9 +54,9 @@ function setupDefaultMocks() {
 
   mockProveedoresListar.mockResolvedValue({
     data: [
-      { id: 10, nombre: "Proveedor Alpha" },
-      { id: 20, nombre: "Proveedor Beta" },
-      { id: 30, nombre: "Proveedor Gamma" },
+      { id: 10, razon_social: "Proveedor Alpha" },
+      { id: 20, razon_social: "Proveedor Beta" },
+      { id: 30, razon_social: "Proveedor Gamma" },
     ],
   });
 
@@ -255,8 +255,8 @@ describe("ProductoForm", () => {
     });
   });
 
-  describe("Lógica de ficha técnica (URL vs PDF)", () => {
-    it("deshabilita el campo de PDF cuando hay URL", async () => {
+  describe("Campo de ficha técnica", () => {
+    it("permite ingresar URL de ficha técnica", async () => {
       renderWithProviders();
 
       await waitFor(() => expect(screen.queryByRole("progressbar")).not.toBeInTheDocument());
@@ -264,25 +264,7 @@ describe("ProductoForm", () => {
       const urlInput = screen.getByLabelText(/URL de ficha técnica/i);
       await userEvent.type(urlInput, "https://example.com/ficha.pdf");
 
-      // El botón de subir PDF debería estar deshabilitado (MUI usa aria-disabled)
-      const uploadButton = screen.getByRole("button", { name: /Subir PDF/i });
-      expect(uploadButton).toHaveAttribute("aria-disabled", "true");
-    });
-
-    it("permite cargar un archivo PDF", async () => {
-      renderWithProviders();
-
-      await waitFor(() => expect(screen.queryByRole("progressbar")).not.toBeInTheDocument());
-
-      const file = new File(["pdf content"], "ficha.pdf", { type: "application/pdf" });
-      const uploadButton = screen.getByRole("button", { name: /Subir PDF/i });
-      const input = uploadButton.querySelector('input[type="file"]') as HTMLInputElement;
-
-      await userEvent.upload(input, file);
-
-      // Verificar que el input de URL está deshabilitado después de cargar PDF
-      const urlInput = screen.getByLabelText(/URL de ficha técnica/i);
-      expect(urlInput).toBeDisabled();
+      expect(urlInput).toHaveValue("https://example.com/ficha.pdf");
     });
   });
 
@@ -476,10 +458,10 @@ describe("ProductoForm", () => {
       const payload = mockProductosCrear.mock.calls[0][0];
       expect(payload.sku).toBe("PROD-123");
       expect(payload.nombre_producto).toBe("Amoxicilina 500mg");
-      expect(payload.proveedor).toBe(10);
+      expect(payload.proveedor_id).toBe(10);
       expect(payload.organizacion.tipo_medicamento).toBe("Antibióticos");
-      // valor_unitario se envía como string porque no tiene valueAsNumber
-      expect(parseFloat(payload.valor_unitario)).toBe(15.75);
+      // valor_unitario_usd se envía como string desde el input
+      expect(parseFloat(payload.valor_unitario_usd)).toBe(15.75);
       expect(parseInt(payload.tiempo_entrega_dias)).toBe(10);
       expect(payload.certificaciones).toEqual([1, 2]);
     });
