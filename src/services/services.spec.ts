@@ -131,7 +131,7 @@ describe("Services Layer", () => {
       const result = await ProductoService.cargaMasiva(file);
 
       expect(mockPost).toHaveBeenCalledWith(
-        "/productos/carga-masiva",
+        "/productos/bulk-upload",
         expect.any(FormData),
         { headers: { "Content-Type": "multipart/form-data" } }
       );
