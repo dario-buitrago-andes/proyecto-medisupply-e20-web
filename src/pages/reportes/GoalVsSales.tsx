@@ -1,0 +1,103 @@
+import { Box, Typography, Paper, LinearProgress } from "@mui/material";
+import { KPI } from "./types";
+
+interface GoalVsSalesProps {
+  kpis: KPI;
+  metaObjetivo: number;
+}
+
+export default function GoalVsSales({ kpis, metaObjetivo }: GoalVsSalesProps) {
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "USD",
+    }).format(value);
+  };
+
+  const progressPercentage = Math.min((kpis.ventas_totales / metaObjetivo) * 100, 100);
+  const isOverGoal = kpis.ventas_totales > metaObjetivo;
+
+  const getProgressColor = () => {
+    if (progressPercentage >= 100) return "success";
+    if (progressPercentage >= 75) return "info";
+    if (progressPercentage >= 50) return "warning";
+    return "error";
+  };
+
+  return (
+    <Box sx={{ mb: 4 }}>
+      <Typography variant="h6" component="h3" gutterBottom sx={{ mb: 2 }}>
+        🎯 Meta vs Ventas
+      </Typography>
+      <Paper sx={{ p: 3, boxShadow: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+          <Box>
+            <Typography variant="body2" color="text.secondary">
+              Meta Objetivo
+            </Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold", color: "text.primary" }}>
+              {formatCurrency(metaObjetivo)}
+            </Typography>
+          </Box>
+          <Box sx={{ textAlign: "right" }}>
+            <Typography variant="body2" color="text.secondary">
+              Ventas Totales
+            </Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main" }}>
+              {formatCurrency(kpis.ventas_totales)}
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ mb: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+            <Typography variant="body2" color="text.secondary">
+              Progreso
+            </Typography>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                fontWeight: "bold",
+                color: isOverGoal ? "success.main" : getProgressColor() + ".main"
+              }}
+            >
+              {progressPercentage.toFixed(1)}%
+              {isOverGoal && " 🎉"}
+            </Typography>
+          </Box>
+          <LinearProgress
+            variant="determinate"
+            value={Math.min(progressPercentage, 100)}
+            color={getProgressColor()}
+            sx={{
+              height: 12,
+              borderRadius: 6,
+              backgroundColor: "#f0f0f0",
+              "& .MuiLinearProgress-bar": {
+                borderRadius: 6,
+              },
+            }}
+          />
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="body2" color="text.secondary">
+            {isOverGoal 
+              ? `¡Superaste la meta por ${formatCurrency(kpis.ventas_totales - metaObjetivo)}!`
+              : `Faltan ${formatCurrency(metaObjetivo - kpis.ventas_totales)} para alcanzar la meta`
+            }
+          </Typography>
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              fontWeight: "bold",
+              color: isOverGoal ? "success.main" : "text.secondary"
+            }}
+          >
+            {isOverGoal ? "✅ Meta Alcanzada" : "📈 En Progreso"}
+          </Typography>
+        </Box>
+      </Paper>
+    </Box>
+  );
+}

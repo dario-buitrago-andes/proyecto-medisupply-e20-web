@@ -72,6 +72,10 @@ describe("AppRoutes", () => {
       expect(routesCode).toContain("import PlanVentaForm from \"../pages/planes_venta/PlanVentaForm\"");
     });
 
+    it("importa ReportesVentas", () => {
+      expect(routesCode).toContain("import ReportesVentas from \"../pages/reportes/ReportesVentas\"");
+    });
+
     it("todos los imports están al inicio del archivo", () => {
       const lines = routesCode.split("\n");
       const firstImportIndex = lines.findIndex(line => line.trim().startsWith("import"));
@@ -114,10 +118,15 @@ describe("AppRoutes", () => {
       expect(routesCode).toContain("<PlanVentaForm />");
     });
 
-    it("tiene exactamente 6 rutas definidas (5 específicas + 1 catch-all)", () => {
+    it("define la ruta /reportes", () => {
+      expect(routesCode).toContain("path=\"/reportes\"");
+      expect(routesCode).toContain("<ReportesVentas />");
+    });
+
+    it("tiene exactamente 7 rutas definidas (6 específicas + 1 catch-all)", () => {
       const routeMatches = routesCode.match(/<Route /g);
       expect(routeMatches).toBeTruthy();
-      expect(routeMatches?.length).toBe(6);
+      expect(routeMatches?.length).toBe(7);
     });
   });
 
@@ -297,13 +306,18 @@ describe("AppRoutes", () => {
       expect(routesCode).toContain("/planes_venta");
     });
 
+    it("tiene rutas para reportes de ventas", () => {
+      expect(routesCode).toContain("/reportes");
+    });
+
     it("todas las rutas principales están presentes", () => {
       const expectedRoutes = [
         "/vendedores",
         "/proveedores",
         "/productos",
         "/productos/carga_masiva",
-        "/planes_venta"
+        "/planes_venta",
+        "/reportes"
       ];
       
       expectedRoutes.forEach(route => {

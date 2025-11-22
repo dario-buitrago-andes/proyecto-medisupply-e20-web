@@ -2,7 +2,8 @@ import axios from "axios";
 
 // Lee API_DOMAIN desde variables de entorno (Create React App usa process.env)
 const baseURL = process.env.REACT_APP_API_DOMAIN ||
-  "http://34.8.129.243"; // Fallback
+  "https://medisupply-edge-proxy-n5jhaxtfma-uc.a.run.app"; // Fallback
+  //"http://localhost:8080"; // Fallback
 
 const api = axios.create({
   baseURL: baseURL + "/api/v1",
