@@ -163,3 +163,5 @@ yarn-error.log*
 
 # IDE
 /.idea/
+.npmrc
+.pre-commit-config.yaml

@@ -61,6 +61,14 @@ export default function Sidebar() {
                     <span className="sidebar-icon">📊</span>
                     Planes de Venta
                 </Link>
+                
+                <Link 
+                    to="/reportes" 
+                    className={`sidebar-link ${isActive('/reportes') ? 'active' : ''}`}
+                >
+                    <span className="sidebar-icon">📈</span>
+                    Reportes de Ventas
+                </Link>
             </nav>
 
             <div className="sidebar-footer">
