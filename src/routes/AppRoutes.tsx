@@ -4,6 +4,7 @@ import ProveedorForm from "../pages/proveedores/ProveedorForm";
 import ProductoForm from "../pages/productos/ProductoForm";
 import CargaMasiva from "../pages/productos/CargaMasiva";
 import PlanVentaForm from "../pages/planes_venta/PlanVentaForm";
+import ReportesVentas from "../pages/reportes/ReportesVentas";
 
 export default function AppRoutes() {
     return (
@@ -13,6 +14,7 @@ export default function AppRoutes() {
             <Route path="/productos" element={<ProductoForm />} />
             <Route path="/productos/carga_masiva" element={<CargaMasiva />} />
             <Route path="/planes_venta" element={<PlanVentaForm />} />
+            <Route path="/reportes" element={<ReportesVentas />} />
             <Route path="*" element={<h3>404 - Página no encontrada</h3>} />
         </Routes>
     );

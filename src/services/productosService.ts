@@ -5,7 +5,7 @@ export const ProductoService = {
     cargaMasiva: (file: File) => {
         const formData = new FormData();
         formData.append("file", file);
-        return api.post("/productos/carga-masiva", formData, {
+        return api.post("/productos/bulk-upload", formData, {
             headers: { "Content-Type": "multipart/form-data" },
         });
     },
