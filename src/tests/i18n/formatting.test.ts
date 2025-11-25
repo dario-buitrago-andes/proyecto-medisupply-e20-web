@@ -1,27 +1,29 @@
 /**
  * i18n/l10n Tests: Number, date, and currency formatting
- * Tests formatting per locale (es-ES, en-US, pt-BR)
+ * Tests formatting per locale (es, en) - compatible with develop branch structure
  */
-import i18n from '../../i18n/config';
+import { testI18n } from '../../test-utils/i18n-test-helper';
 
 describe('i18n Formatting', () => {
-  const testLocales = ['es-ES', 'en-US', 'pt-BR'] as const;
+  const testLocales = ['es', 'en'] as const;
 
   describe('Number formatting', () => {
     test.each(testLocales)('should format numbers correctly for %s', (locale) => {
-      i18n.changeLanguage(locale);
+      testI18n.changeLanguage(locale);
       
       const number = 1234.56;
-      const formatter = new Intl.NumberFormat(locale);
+      // Use locale codes that match the i18n config (es, en)
+      const localeCode = locale === 'es' ? 'es-ES' : 'en-US';
+      const formatter = new Intl.NumberFormat(localeCode);
       const formatted = formatter.format(number);
       
       expect(formatted).toBeTruthy();
       
       // Verify locale-specific formatting
-      if (locale === 'es-ES' || locale === 'pt-BR') {
-        // Spanish and Portuguese use comma as decimal separator
+      if (locale === 'es') {
+        // Spanish uses comma as decimal separator
         expect(formatted).toContain(',');
-      } else if (locale === 'en-US') {
+      } else if (locale === 'en') {
         // English uses dot as decimal separator
         expect(formatted).toContain('.');
       }
@@ -30,11 +32,12 @@ describe('i18n Formatting', () => {
 
   describe('Currency formatting', () => {
     test.each(testLocales)('should format currency correctly for %s', (locale) => {
-      i18n.changeLanguage(locale);
+      testI18n.changeLanguage(locale);
       
       const amount = 1234.56;
-      const currency = locale === 'pt-BR' ? 'BRL' : locale === 'es-ES' ? 'EUR' : 'USD';
-      const formatter = new Intl.NumberFormat(locale, {
+      const localeCode = locale === 'es' ? 'es-ES' : 'en-US';
+      const currency = locale === 'es' ? 'EUR' : 'USD';
+      const formatter = new Intl.NumberFormat(localeCode, {
         style: 'currency',
         currency,
       });
@@ -47,10 +50,11 @@ describe('i18n Formatting', () => {
 
   describe('Date formatting', () => {
     test.each(testLocales)('should format dates correctly for %s', (locale) => {
-      i18n.changeLanguage(locale);
+      testI18n.changeLanguage(locale);
       
       const date = new Date('2024-01-15');
-      const formatter = new Intl.DateTimeFormat(locale);
+      const localeCode = locale === 'es' ? 'es-ES' : 'en-US';
+      const formatter = new Intl.DateTimeFormat(localeCode);
       const formatted = formatter.format(date);
       
       expect(formatted).toBeTruthy();
@@ -60,21 +64,20 @@ describe('i18n Formatting', () => {
 
   describe('Translation coverage', () => {
     test.each(testLocales)('should have translations for all keys in %s', async (locale) => {
-      i18n.changeLanguage(locale);
+      testI18n.changeLanguage(locale);
       
+      // Use namespace structure from develop (common.actions.save, etc.)
       const requiredKeys = [
-        'common.save',
-        'common.cancel',
-        'auth.login',
-        'auth.logout',
-        'products.title',
-        'suppliers.title',
-        'sellers.title',
-        'salesPlans.title',
+        'common:actions.save',
+        'common:actions.cancel',
+        'auth:login.title',
+        'vendors:title',
+        'products:title',
+        'salesPlans:title',
       ];
       
       requiredKeys.forEach(key => {
-        const translation = i18n.t(key);
+        const translation = testI18n.t(key);
         expect(translation).toBeTruthy();
         expect(translation).not.toBe(key); // Should not return the key itself
       });
