@@ -24,14 +24,34 @@ describe('Login Accessibility', () => {
 
   it('should have no accessibility violations', async () => {
     const { container } = renderLogin();
-    const results = await axe(container, {
-      rules: {
-        // Allow page-region rule to fail (requires landmarks like <main>, <nav>)
-        // This is a known issue that should be fixed in the component itself
-        'region': { enabled: false },
-      },
-    });
-    expect(results).toHaveNoViolations();
+    
+    // Suppress console output from axe during test
+    const originalConsoleGroup = console.group;
+    const originalConsoleGroupCollapsed = console.groupCollapsed;
+    const originalConsoleLog = console.log;
+    const originalConsoleError = console.error;
+    
+    console.group = jest.fn();
+    console.groupCollapsed = jest.fn();
+    console.log = jest.fn();
+    console.error = jest.fn();
+    
+    try {
+      const results = await axe(container, {
+        rules: {
+          // Allow page-region rule to fail (requires landmarks like <main>, <nav>)
+          // This is a known issue that should be fixed in the component itself
+          'region': { enabled: false },
+        },
+      });
+      expect(results).toHaveNoViolations();
+    } finally {
+      // Restore console methods
+      console.group = originalConsoleGroup;
+      console.groupCollapsed = originalConsoleGroupCollapsed;
+      console.log = originalConsoleLog;
+      console.error = originalConsoleError;
+    }
   });
 
   it('should have proper ARIA labels', () => {

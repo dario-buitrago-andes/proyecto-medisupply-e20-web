@@ -74,7 +74,34 @@ if (typeof global.TransformStream === 'undefined') {
 
 expect.extend(toHaveNoViolations);
 
-// Configure axe for React Testing Library
+// Suppress axe-core console output to reduce log noise in tests
+// This prevents console.groupCollapsed and other axe logs from cluttering test output
+const originalConsoleLog = console.log;
+const originalConsoleError = console.error;
+
+// Mock console methods to filter out axe-core logs
+console.group = jest.fn();
+console.groupCollapsed = jest.fn();
+console.log = jest.fn((...args: any[]) => {
+  const message = String(args[0] || '');
+  // Filter out axe-core related logs
+  if (!message.includes('axe') && 
+      !message.includes('New axe issues') &&
+      !message.includes('dequeuniversity.com')) {
+    originalConsoleLog(...args);
+  }
+});
+console.error = jest.fn((...args: any[]) => {
+  const message = String(args[0] || '');
+  // Filter out axe-core error logs
+  if (!message.includes('Fix any of the following') &&
+      !message.includes('axe') &&
+      !message.includes('dequeuniversity.com')) {
+    originalConsoleError(...args);
+  }
+});
+
+// Configure axe for React Testing Library (only in browser environment)
 if (typeof window !== 'undefined') {
   axe.default(React, ReactDOM, 1000);
 }
