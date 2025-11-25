@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {
@@ -40,49 +41,6 @@ import PerformanceTable from "./PerformanceTable";
 import RegionalSalesChart from "./RegionalSalesChart";
 import ProductCategoryChart from "./ProductCategoryChart";
 
-const schema = yup.object({
-  vendedor_id: yup.number().nullable().default(null),
-  pais: yup.array().of(yup.number().required()).required(),
-  zona_geografica: yup.array().of(yup.string().required()).required(),
-  periodo_tiempo: yup
-    .mixed<"MES_ACTUAL" | "TRIMESTRE_ACTUAL" | "ANIO_ACTUAL" | "PERSONALIZADO">()
-    .oneOf(["MES_ACTUAL", "TRIMESTRE_ACTUAL", "ANIO_ACTUAL", "PERSONALIZADO"])
-    .required("Período de tiempo es requerido"),
-  fecha_inicio: yup.string().nullable().default(null),
-  fecha_fin: yup.string().nullable().default(null),
-  categoria_producto: yup.array().of(yup.string().required()).required(),
-  tipo_reporte: yup
-    .array()
-    .of(yup.string().required())
-    .min(1, "Debe seleccionar al menos un tipo de reporte")
-    .required(),
-}).test("segmentation-filter", "Debe seleccionar al menos un filtro: vendedor, país o zona geográfica", function(value) {
-  const { vendedor_id, pais, zona_geografica } = value;
-  return vendedor_id !== null || pais.length > 0 || zona_geografica.length > 0;
-}).test("custom-dates", "Debe indicar fecha_inicio y fecha_fin para período PERSONALIZADO", function(value) {
-  const { periodo_tiempo, fecha_inicio, fecha_fin } = value;
-  if (periodo_tiempo === "PERSONALIZADO") {
-    return fecha_inicio !== null && fecha_fin !== null && fecha_inicio !== "" && fecha_fin !== "";
-  }
-  return true;
-}).test("date-range", "fecha_fin debe ser mayor a fecha_inicio", function(value) {
-  const { periodo_tiempo, fecha_inicio, fecha_fin } = value;
-  if (periodo_tiempo === "PERSONALIZADO" && fecha_inicio && fecha_fin) {
-    return new Date(fecha_fin) > new Date(fecha_inicio);
-  }
-  return true;
-}).test("date-max-range", "El rango máximo es de 2 años (730 días)", function(value) {
-  const { periodo_tiempo, fecha_inicio, fecha_fin } = value;
-  if (periodo_tiempo === "PERSONALIZADO" && fecha_inicio && fecha_fin) {
-    const start = new Date(fecha_inicio);
-    const end = new Date(fecha_fin);
-    const diffTime = Math.abs(end.getTime() - start.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= 730;
-  }
-  return true;
-});
-
 const ZONA_GEOGRAFICA_OPTIONS = ["Norte", "Centro", "Sur"];
 const TIPO_REPORTE_OPTIONS = [
   { value: "DESEMPENO_VENDEDOR", label: "Desempeño por Vendedor" },
@@ -99,9 +57,53 @@ const PERIODO_OPTIONS = [
 ];
 
 export default function ReportesVentas() {
+  const { t } = useTranslation();
   const { notify } = useNotify();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  
+  const schema = yup.object({
+    vendedor_id: yup.number().nullable().default(null),
+    pais: yup.array().of(yup.number().required()).required(),
+    zona_geografica: yup.array().of(yup.string().required()).required(),
+    periodo_tiempo: yup
+      .mixed<"MES_ACTUAL" | "TRIMESTRE_ACTUAL" | "ANIO_ACTUAL" | "PERSONALIZADO">()
+      .oneOf(["MES_ACTUAL", "TRIMESTRE_ACTUAL", "ANIO_ACTUAL", "PERSONALIZADO"])
+      .required(t('reports:validation.periodRequired')),
+    fecha_inicio: yup.string().nullable().default(null),
+    fecha_fin: yup.string().nullable().default(null),
+    categoria_producto: yup.array().of(yup.string().required()).required(),
+    tipo_reporte: yup
+      .array()
+      .of(yup.string().required())
+      .min(1, t('reports:validation.reportTypeRequired'))
+      .required(),
+  }).test("segmentation-filter", t('reports:validation.segmentationRequired'), function(value) {
+    const { vendedor_id, pais, zona_geografica } = value;
+    return vendedor_id !== null || pais.length > 0 || zona_geografica.length > 0;
+  }).test("custom-dates", t('reports:validation.customDatesRequired'), function(value) {
+    const { periodo_tiempo, fecha_inicio, fecha_fin } = value;
+    if (periodo_tiempo === "PERSONALIZADO") {
+      return fecha_inicio !== null && fecha_fin !== null && fecha_inicio !== "" && fecha_fin !== "";
+    }
+    return true;
+  }).test("date-range", t('reports:validation.dateRangeInvalid'), function(value) {
+    const { periodo_tiempo, fecha_inicio, fecha_fin } = value;
+    if (periodo_tiempo === "PERSONALIZADO" && fecha_inicio && fecha_fin) {
+      return new Date(fecha_fin) > new Date(fecha_inicio);
+    }
+    return true;
+  }).test("date-max-range", t('reports:validation.dateRangeMaxExceeded'), function(value) {
+    const { periodo_tiempo, fecha_inicio, fecha_fin } = value;
+    if (periodo_tiempo === "PERSONALIZADO" && fecha_inicio && fecha_fin) {
+      const start = new Date(fecha_inicio);
+      const end = new Date(fecha_fin);
+      const diffTime = Math.abs(end.getTime() - start.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays <= 730;
+    }
+    return true;
+  });
   
   const { control, handleSubmit, watch, formState: { errors } } = useForm<ReportFilters>({
     resolver: yupResolver(schema),
@@ -153,7 +155,7 @@ export default function ReportesVentas() {
     try {
       const response = await ReportesService.generarReporte(data);
       setReportData(response.data);
-      notify("Reporte generado exitosamente", "success");
+      notify(t('reports:messages.reportGenerated'), "success");
       if (isMobile) {
         setFiltersExpanded(false);
       }
@@ -210,7 +212,7 @@ export default function ReportesVentas() {
   return (
     <Box sx={{ maxWidth: 1400, m: "auto", p: 2 }}>
       <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3, textAlign: "center" }}>
-        📊 Reportes de Ventas
+        📊 {t('reports:title')}
       </Typography>
 
       {/* Filters Section */}
@@ -218,7 +220,7 @@ export default function ReportesVentas() {
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
           <FilterList sx={{ mr: 1, color: "primary.main" }} />
           <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
-            Filtros de Reporte
+            {t('reports:filters.title')}
           </Typography>
           {isMobile && (
             <IconButton onClick={() => setFiltersExpanded(!filtersExpanded)}>
@@ -232,7 +234,7 @@ export default function ReportesVentas() {
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
               {/* Vendedor */}
               <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 calc(50% - 12px)" } }}>
-                <FormLabel sx={{ mb: 1, display: "block" }}>Vendedor (opcional)</FormLabel>
+                <FormLabel sx={{ mb: 1, display: "block" }}>{t('reports:filters.vendor')}</FormLabel>
                 <Controller
                   name="vendedor_id"
                   control={control}
@@ -246,7 +248,7 @@ export default function ReportesVentas() {
                       onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
                       disabled={loading}
                     >
-                      <MenuItem value="">Ninguno</MenuItem>
+                      <MenuItem value="">{t('common:none')}</MenuItem>
                       {vendedores.map((v) => (
                         <MenuItem key={v.id} value={v.id}>{v.nombre}</MenuItem>
                       ))}
@@ -257,33 +259,33 @@ export default function ReportesVentas() {
 
               {/* País */}
               <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 calc(50% - 12px)" } }}>
-                <FormLabel sx={{ mb: 1, display: "block" }}>País (multi-selección)</FormLabel>
+                <FormLabel sx={{ mb: 1, display: "block" }}>{t('reports:filters.country')}</FormLabel>
                 {renderMultiSelect(
                   "pais",
                   paises,
                   (p) => p.nombre,
                   (p) => p.id,
-                  "Países",
-                  "Seleccionar países"
+                  t('reports:filters.country'),
+                  t('reports:filters.selectCountry')
                 )}
               </Box>
 
               {/* Zona Geográfica */}
               <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 calc(50% - 12px)" } }}>
-                <FormLabel sx={{ mb: 1, display: "block" }}>Zona Geográfica (multi-selección)</FormLabel>
+                <FormLabel sx={{ mb: 1, display: "block" }}>{t('reports:filters.zone')}</FormLabel>
                 {renderMultiSelect(
                   "zona_geografica",
-                  ZONA_GEOGRAFICA_OPTIONS.map(z => ({ value: z, label: z })),
+                  ZONA_GEOGRAFICA_OPTIONS.map(z => ({ value: z, label: t(`reports:zones.${z}`) })),
                   (z) => z.label,
                   (z) => z.value,
-                  "Zonas Geográficas",
-                  "Seleccionar zonas"
+                  t('reports:filters.zone'),
+                  t('reports:filters.selectZone')
                 )}
               </Box>
 
               {/* Período de Tiempo */}
               <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 calc(50% - 12px)" } }}>
-                <FormLabel sx={{ mb: 1, display: "block" }}>Período de Tiempo ⚠️ REQUERIDO</FormLabel>
+                <FormLabel sx={{ mb: 1, display: "block" }}>{t('reports:filters.period')} ⚠️</FormLabel>
                 <Controller
                   name="periodo_tiempo"
                   control={control}
@@ -297,7 +299,7 @@ export default function ReportesVentas() {
                     >
                       {PERIODO_OPTIONS.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                          {t(`reports:periods.${option.value}`)}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -309,7 +311,7 @@ export default function ReportesVentas() {
               {showCustomDates && (
                 <>
                   <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 calc(50% - 12px)" } }}>
-                    <FormLabel sx={{ mb: 1, display: "block" }}>Fecha Inicio</FormLabel>
+                    <FormLabel sx={{ mb: 1, display: "block" }}>{t('reports:filters.startDate')}</FormLabel>
                     <Controller
                       name="fecha_inicio"
                       control={control}
@@ -328,7 +330,7 @@ export default function ReportesVentas() {
                     />
                   </Box>
                   <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 calc(50% - 12px)" } }}>
-                    <FormLabel sx={{ mb: 1, display: "block" }}>Fecha Fin</FormLabel>
+                    <FormLabel sx={{ mb: 1, display: "block" }}>{t('reports:filters.endDate')}</FormLabel>
                     <Controller
                       name="fecha_fin"
                       control={control}
@@ -351,20 +353,20 @@ export default function ReportesVentas() {
 
               {/* Categoría de Producto */}
               <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 calc(50% - 12px)" } }}>
-                <FormLabel sx={{ mb: 1, display: "block" }}>Categoría de Producto (multi-selección)</FormLabel>
+                <FormLabel sx={{ mb: 1, display: "block" }}>{t('reports:filters.category')}</FormLabel>
                 {renderMultiSelect(
                   "categoria_producto",
                   categorias,
                   (c) => c.nombre,
                   (c) => c.nombre,
-                  "Categorías de Producto",
-                  "Seleccionar categorías"
+                  t('reports:filters.category'),
+                  t('reports:filters.selectCategory')
                 )}
               </Box>
 
               {/* Tipos de Reporte */}
               <Box sx={{ flex: "1 1 100%" }}>
-                <FormLabel sx={{ mb: 1, display: "block" }}>Tipos de Reporte ⚠️ REQUERIDO (mínimo 1)</FormLabel>
+                <FormLabel sx={{ mb: 1, display: "block" }}>{t('reports:filters.reportType')} ⚠️</FormLabel>
                 <Controller
                   name="tipo_reporte"
                   control={control}
@@ -385,7 +387,7 @@ export default function ReportesVentas() {
                                 }}
                               />
                             }
-                            label={option.label}
+                            label={t(`reports:reportTypes.${option.value}`)}
                           />
                         ))}
                       </FormGroup>
@@ -410,10 +412,10 @@ export default function ReportesVentas() {
                 {reportLoading ? (
                   <>
                     <CircularProgress size={20} sx={{ mr: 1 }} />
-                    Generando Reporte...
+                    {t('reports:messages.loading')}
                   </>
                 ) : (
-                  "📊 Generar Reporte"
+                  `📊 ${t('reports:filters.apply')}`
                 )}
               </Button>
             </Box>
@@ -452,7 +454,7 @@ export default function ReportesVentas() {
         <Box sx={{ textAlign: "center", py: 4 }}>
           <CircularProgress size={60} />
           <Typography variant="h6" sx={{ mt: 2 }}>
-            Generando reporte...
+            {t('reports:messages.loading')}
           </Typography>
         </Box>
       )}
@@ -461,7 +463,7 @@ export default function ReportesVentas() {
       {!reportData && !reportLoading && (
         <Alert severity="info" sx={{ mt: 4 }}>
           <Typography variant="body1">
-            Configure los filtros y haga clic en "Generar Reporte" para visualizar los datos de ventas.
+            {t('reports:messages.noData')}
           </Typography>
         </Alert>
       )}

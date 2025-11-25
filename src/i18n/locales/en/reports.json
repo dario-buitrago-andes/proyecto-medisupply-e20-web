@@ -1,0 +1,105 @@
+{
+  "title": "Sales Reports",
+  "subtitle": "Sales analysis and statistics",
+  "filters": {
+    "title": "Filters",
+    "period": "Time Period",
+    "country": "Country",
+    "zone": "Geographic Zone",
+    "vendor": "Seller",
+    "category": "Product Category",
+    "reportType": "Report Type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "apply": "Generate Report",
+    "clear": "Clear",
+    "showFilters": "Show Filters",
+    "hideFilters": "Hide Filters",
+    "selectVendor": "Select a seller (optional)",
+    "selectCountry": "Select countries",
+    "selectZone": "Select geographic zones",
+    "selectCategory": "Select product categories"
+  },
+  "periods": {
+    "MES_ACTUAL": "Current Month",
+    "TRIMESTRE_ACTUAL": "Current Quarter",
+    "ANIO_ACTUAL": "Current Year",
+    "PERSONALIZADO": "Custom"
+  },
+  "reportTypes": {
+    "DESEMPENO_VENDEDOR": "Seller Performance",
+    "VENTAS_POR_PRODUCTO": "Product Sales",
+    "CUMPLIMIENTO_METAS": "Goal Achievement",
+    "VENTAS_POR_ZONA": "Zone Sales"
+  },
+  "kpi": {
+    "totalSales": "Total Sales",
+    "monthlyOrders": "Monthly Orders",
+    "orders": "orders",
+    "goalCompletion": "Completion",
+    "averageDeliveryTime": "Avg Delivery Time",
+    "hours": "hours"
+  },
+  "goalVsSales": {
+    "title": "Goal vs Sales",
+    "goalTarget": "Goal Target",
+    "totalSales": "Total Sales",
+    "progress": "Progress",
+    "goalAchieved": "Goal Achieved",
+    "inProgress": "In Progress",
+    "exceeded": "You exceeded the goal by {{amount}}!",
+    "remaining": "{{amount}} remaining to reach the goal"
+  },
+  "performance": {
+    "title": "Seller Performance",
+    "vendor": "Seller",
+    "country": "Country",
+    "orders": "Orders",
+    "sales": "Sales (USD)",
+    "status": "Status",
+    "noData": "No seller performance data available",
+    "rowsPerPage": "Rows per page:",
+    "displayedRows": "{{from}}-{{to}} of {{count}}"
+  },
+  "regionalSales": {
+    "title": "Regional Sales",
+    "country": "Country",
+    "sales": "Sales",
+    "zone": "Zone",
+    "noData": "No regional sales data available"
+  },
+  "productCategory": {
+    "title": "Products by Category",
+    "category": "Category",
+    "units": "Units",
+    "revenue": "Revenue (USD)",
+    "percentage": "Percentage",
+    "noData": "No product category data available"
+  },
+  "status": {
+    "OK": "OK",
+    "HIGH": "High",
+    "WARN": "Warning",
+    "LOW": "Low"
+  },
+  "zones": {
+    "Norte": "North",
+    "Centro": "Center",
+    "Sur": "South"
+  },
+  "validation": {
+    "periodRequired": "Time period is required",
+    "reportTypeRequired": "Must select at least one report type",
+    "segmentationRequired": "Must select at least one filter: seller, country or geographic zone",
+    "customDatesRequired": "Must indicate start_date and end_date for CUSTOM period",
+    "dateRangeInvalid": "end_date must be greater than start_date",
+    "dateRangeMaxExceeded": "Maximum range is 2 years (730 days)"
+  },
+  "messages": {
+    "noData": "Configure the filters and click \"Generate Report\" to view sales data.",
+    "noDataForFilters": "No data available for selected filters",
+    "loading": "Loading report...",
+    "error": "Error loading report",
+    "reportGenerated": "Report generated successfully"
+  }
+}

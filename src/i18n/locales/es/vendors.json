@@ -1,0 +1,63 @@
+{
+  "title": "Proveedores",
+  "create": "Registrar Proveedor",
+  "edit": "Editar Proveedor",
+  "delete": "Eliminar Proveedor",
+  "list": "Lista de Proveedores",
+  "fields": {
+    "name": "Razón Social",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "country": "Países de Operación",
+    "status": "Estado",
+    "createdAt": "Fecha de Creación",
+    "categories": "Categorías de Suministros",
+    "coldChain": "Capacidad Cadena de Frío",
+    "certifications": "Certificaciones Sanitarias"
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "validation": {
+    "nameRequired": "Razón social obligatoria",
+    "selectCountry": "Seleccione al menos un país",
+    "selectCertification": "Seleccione al menos una certificación"
+  },
+  "messages": {
+    "createSuccess": "Proveedor registrado exitosamente",
+    "updateSuccess": "Proveedor actualizado exitosamente",
+    "deleteSuccess": "Proveedor eliminado exitosamente",
+    "deleteConfirm": "¿Está seguro de eliminar este proveedor?"
+  },
+  "sellers": {
+    "title": "Vendedores",
+    "create": "Registrar Vendedor",
+    "edit": "Editar Vendedor",
+    "list": "Lista de Vendedores",
+    "fields": {
+      "fullName": "Nombre Completo",
+      "corporateEmail": "Email Corporativo",
+      "assignedCountry": "País Asignado",
+      "status": "Estado"
+    },
+    "validation": {
+      "nameRequired": "Nombre completo obligatorio",
+      "nameOnlyLetters": "Solo letras y espacios",
+      "emailRequired": "Email corporativo obligatorio",
+      "emailInvalid": "Email inválido",
+      "countryRequired": "País obligatorio",
+      "selectCountry": "Seleccione un país",
+      "statusRequired": "Estado obligatorio",
+      "statusInvalid": "Estado inválido"
+    },
+    "messages": {
+      "createSuccess": "Vendedor creado exitosamente",
+      "updateSuccess": "Vendedor actualizado exitosamente",
+      "deleteSuccess": "Vendedor eliminado exitosamente",
+      "loadingCountries": "Cargando países...",
+      "errorLoadingCountries": "Error al cargar países. Puedes continuar con el formulario."
+    }
+  }
+}

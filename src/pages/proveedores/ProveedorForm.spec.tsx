@@ -1,6 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "../../test-utils/i18n-test-helper";
 import userEvent from "@testing-library/user-event";
 
 // ============================================================================
@@ -91,10 +91,11 @@ describe("ProveedorForm", () => {
     it("muestra el título 'Registrar Proveedor'", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      // Esperar a que el formulario se cargue (desaparece el mensaje de carga)
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Verificar que el título está presente
-      const titulo = screen.getByRole("heading", { name: /Registrar Proveedor/i, level: 1 });
+      const titulo = await screen.findByRole("heading", { name: /Registrar Proveedor/i, level: 1 });
       expect(titulo).toBeInTheDocument();
     });
   });
@@ -102,13 +103,13 @@ describe("ProveedorForm", () => {
   describe("Estados de carga inicial", () => {
     it("muestra mensaje de carga mientras obtiene datos", () => {
       renderWithProviders();
-      expect(screen.getByText(/Cargando datos.../i)).toBeInTheDocument();
+      expect(screen.getByText(/Cargando\.\.\./i)).toBeInTheDocument();
     });
 
     it("carga y muestra países como checkboxes", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       expect(screen.getByLabelText("Colombia")).toBeInTheDocument();
       expect(screen.getByLabelText("México")).toBeInTheDocument();
@@ -118,7 +119,7 @@ describe("ProveedorForm", () => {
     it("carga y muestra certificaciones como checkboxes", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       expect(screen.getByLabelText("ISO-9001")).toBeInTheDocument();
       expect(screen.getByLabelText("FDA-APPROVED")).toBeInTheDocument();
@@ -128,7 +129,7 @@ describe("ProveedorForm", () => {
     it("carga y muestra categorías de suministros como checkboxes", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       expect(screen.getByLabelText("Medicamentos")).toBeInTheDocument();
       expect(screen.getByLabelText("Equipos Médicos")).toBeInTheDocument();
@@ -138,7 +139,7 @@ describe("ProveedorForm", () => {
     it("muestra opciones de cadena de frío predefinidas", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       expect(screen.getByLabelText("2-8°C")).toBeInTheDocument();
       expect(screen.getByLabelText("-20°C")).toBeInTheDocument();
@@ -184,7 +185,7 @@ describe("ProveedorForm", () => {
     it("valida que razón social es obligatoria", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const submitBtn = screen.getByRole("button", { name: /Guardar/i });
       await userEvent.click(submitBtn);
@@ -195,7 +196,7 @@ describe("ProveedorForm", () => {
     it("valida que se debe seleccionar al menos un país", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Llenar razón social para que solo falle países
       const razonSocialInput = screen.getByLabelText(/Razón social/i);
@@ -210,7 +211,7 @@ describe("ProveedorForm", () => {
     it("valida que se debe seleccionar al menos una certificación", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Llenar campos mínimos excepto certificaciones
       const razonSocialInput = screen.getByLabelText(/Razón social/i);
@@ -229,7 +230,7 @@ describe("ProveedorForm", () => {
     it("muestra todos los errores de validación simultáneamente", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const submitBtn = screen.getByRole("button", { name: /Guardar/i });
       await userEvent.click(submitBtn);
@@ -245,7 +246,7 @@ describe("ProveedorForm", () => {
     it("valida y limpia espacios en razón social (trim)", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Intentar enviar con solo espacios
       const razonSocialInput = screen.getByLabelText(/Razón social/i);
@@ -263,7 +264,7 @@ describe("ProveedorForm", () => {
     it("permite seleccionar múltiples países", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const colombiaCheckbox = screen.getByLabelText("Colombia");
       const mexicoCheckbox = screen.getByLabelText("México");
@@ -279,7 +280,7 @@ describe("ProveedorForm", () => {
     it("permite deseleccionar países", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const colombiaCheckbox = screen.getByLabelText("Colombia");
 
@@ -294,7 +295,7 @@ describe("ProveedorForm", () => {
     it("seleccionar un país elimina el error de validación", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Llenar razón social y provocar error de países
       const razonSocialInput = screen.getByLabelText(/Razón social/i);
@@ -324,7 +325,7 @@ describe("ProveedorForm", () => {
     it("permite seleccionar múltiples certificaciones", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const isoCheckbox = screen.getByLabelText("ISO-9001");
       const fdaCheckbox = screen.getByLabelText("FDA-APPROVED");
@@ -340,7 +341,7 @@ describe("ProveedorForm", () => {
     it("permite deseleccionar certificaciones", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const isoCheckbox = screen.getByLabelText("ISO-9001");
 
@@ -356,7 +357,7 @@ describe("ProveedorForm", () => {
     it("permite seleccionar múltiples categorías (opcional)", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const medicamentosCheckbox = screen.getByLabelText("Medicamentos");
       const equiposCheckbox = screen.getByLabelText("Equipos Médicos");
@@ -372,7 +373,7 @@ describe("ProveedorForm", () => {
     it("no es obligatorio seleccionar categorías", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Llenar solo campos obligatorios (sin categorías)
       const razonSocialInput = screen.getByLabelText(/Razón social/i);
@@ -402,7 +403,7 @@ describe("ProveedorForm", () => {
     it("permite seleccionar múltiples opciones de cadena de frío", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const option1 = screen.getByLabelText("2-8°C");
       const option2 = screen.getByLabelText("-20°C");
@@ -421,7 +422,7 @@ describe("ProveedorForm", () => {
     it("permite deseleccionar opciones de cadena de frío", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       const ambienteCheckbox = screen.getByLabelText("Ambiente");
 
@@ -435,7 +436,7 @@ describe("ProveedorForm", () => {
     it("no es obligatorio seleccionar capacidad de cadena de frío", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Llenar solo campos obligatorios
       const razonSocialInput = screen.getByLabelText(/Razón social/i);
@@ -450,12 +451,10 @@ describe("ProveedorForm", () => {
       const submitBtn = screen.getByRole("button", { name: /Guardar/i });
       await userEvent.click(submitBtn);
 
-      // No debería haber error de cadena de frío
+      // Verificar que se llamó al servicio (no hubo errores de validación)
       await waitFor(() => {
-        expect(screen.queryByText(/cadena.*frío/i)).not.toBeInTheDocument();
+        expect(mockProveedorCrear).toHaveBeenCalled();
       });
-
-      expect(mockProveedorCrear).toHaveBeenCalled();
     });
   });
 
@@ -463,7 +462,7 @@ describe("ProveedorForm", () => {
     it("permite completar y enviar el formulario con campos mínimos obligatorios", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Llenar razón social
       const razonSocialInput = screen.getByLabelText(/Razón social/i);
@@ -500,7 +499,7 @@ describe("ProveedorForm", () => {
     it("permite completar el formulario con todos los campos", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Razón social
       const razonSocialInput = screen.getByLabelText(/Razón social/i);
@@ -543,7 +542,7 @@ describe("ProveedorForm", () => {
     it("muestra notificación de éxito al crear proveedor", async () => {
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Llenar campos mínimos
       await userEvent.type(screen.getByLabelText(/Razón social/i), "Test SA");
@@ -564,7 +563,7 @@ describe("ProveedorForm", () => {
 
       renderWithProviders();
 
-      await waitFor(() => expect(screen.queryByText(/Cargando datos/i)).not.toBeInTheDocument());
+      await waitFor(() => expect(screen.queryByText(/Cargando\.\.\./i)).not.toBeInTheDocument());
 
       // Llenar campos mínimos
       await userEvent.type(screen.getByLabelText(/Razón social/i), "Test SA");

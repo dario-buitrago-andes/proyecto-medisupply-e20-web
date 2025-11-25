@@ -1,5 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     TextField,
     Button,
@@ -45,6 +46,7 @@ export type ProductoFormData = {
 };
 
 export default function ProductoForm() {
+    const { t } = useTranslation();
     const { notify } = useNotify();
     const [certificaciones, setCertificaciones] = useState<Certificacion[]>([]);
     const [loading, setLoading] = useState(true);
@@ -121,7 +123,7 @@ export default function ProductoForm() {
     const onSubmit = async (data: any) => {
         try {
             await ProductoService.crear(data);
-            notify("Producto creado", "success");
+            notify(t('products:messages.createSuccess'), "success");
         } catch (e) {
             const msg = getApiErrorMessage(e);
             notify(msg, "error");
@@ -131,16 +133,16 @@ export default function ProductoForm() {
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: 600, m: "auto" }}>
             <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3, textAlign: 'center' }}>
-                Registrar Producto
+                {t('products:create')}
             </Typography>
 
-            <Typography variant="h6" sx={{ mt: 2 }}>Información básica</Typography>
-            <TextField label="SKU" {...register("sku")} fullWidth margin="normal" />
-            <TextField label="Nombre del producto" {...register("nombre_producto")} fullWidth margin="normal" />
+            <Typography variant="h6" sx={{ mt: 2 }}>{t('products:sections.basicInfo')}</Typography>
+            <TextField label={t('products:fields.sku')} {...register("sku")} fullWidth margin="normal" />
+            <TextField label={t('products:fields.name')} {...register("nombre_producto")} fullWidth margin="normal" />
             <TextField
                 select
-                label="Proveedor"
-                {...register("proveedor_id", { required: "El proveedor es obligatorio", valueAsNumber: true })}
+                label={t('products:fields.vendor')}
+                {...register("proveedor_id", { required: t('products:validation.providerRequired'), valueAsNumber: true })}
                 fullWidth
                 margin="normal"
                 error={!!errors.proveedor_id}
@@ -153,18 +155,18 @@ export default function ProductoForm() {
                 ))}
             </TextField>
 
-            <Typography variant="h6" sx={{ mt: 3 }}>Ficha Técnica</Typography>
+            <Typography variant="h6" sx={{ mt: 3 }}>{t('products:sections.technicalSheet')}</Typography>
             <TextField
-                label="URL de ficha técnica"
+                label={t('products:fields.technicalSheetUrl')}
                 {...register("ficha_tecnica_url")}
                 fullWidth
                 margin="normal"
             />
 
-            <Typography variant="h6" sx={{ mt: 3 }}>Condición de almacenamiento</Typography>
+            <Typography variant="h6" sx={{ mt: 3 }}>{t('products:sections.storageConditions')}</Typography>
             <TextField
                 select
-                label="Temperatura de almacenamiento (°C)"
+                label={t('products:fields.temperature')}
                 {...register("condiciones.temperatura")}
                 fullWidth
                 margin="normal"
@@ -177,17 +179,17 @@ export default function ProductoForm() {
                         </MenuItem>
                     ))}
             </TextField>
-            <TextField label="Condiciones de humedad" {...register("condiciones.humedad")} fullWidth margin="normal" />
-            <TextField label="Condiciones de luz" {...register("condiciones.luz")} fullWidth margin="normal" />
-            <TextField label="Condiciones de ventilación" {...register("condiciones.ventilacion")} fullWidth margin="normal" />
-            <TextField label="Condiciones de seguridad" {...register("condiciones.seguridad")} fullWidth margin="normal" />
-            <TextField label="Condiciones del envase" {...register("condiciones.envase")} fullWidth margin="normal" />
+            <TextField label={t('products:fields.humidity')} {...register("condiciones.humedad")} fullWidth margin="normal" />
+            <TextField label={t('products:fields.light')} {...register("condiciones.luz")} fullWidth margin="normal" />
+            <TextField label={t('products:fields.ventilation')} {...register("condiciones.ventilacion")} fullWidth margin="normal" />
+            <TextField label={t('products:fields.security')} {...register("condiciones.seguridad")} fullWidth margin="normal" />
+            <TextField label={t('products:fields.packaging')} {...register("condiciones.envase")} fullWidth margin="normal" />
 
-            <Typography variant="h6" sx={{ mt: 3 }}>Organización</Typography>
+            <Typography variant="h6" sx={{ mt: 3 }}>{t('products:sections.organization')}</Typography>
             <TextField
                 select
-                label="Tipo de medicamento"
-                {...register("organizacion.tipo_medicamento", { required: "Seleccione un tipo de medicamento" })}
+                label={t('products:fields.medicineType')}
+                {...register("organizacion.tipo_medicamento", { required: t('products:validation.medicineTypeRequired') })}
                 fullWidth
                 margin="normal"
                 error={!!errors.organizacion?.tipo_medicamento}
@@ -205,7 +207,7 @@ export default function ProductoForm() {
                 ))}
             </TextField>
             <TextField
-                label="Fecha de vencimiento"
+                label={t('products:fields.expirationDate')}
                 type="date"
                 {...register("organizacion.fecha_vencimiento")}
                 InputLabelProps={{ shrink: true }}
@@ -213,12 +215,12 @@ export default function ProductoForm() {
                 margin="normal"
             />
 
-            <Typography variant="h6" sx={{ mt: 3 }}>Valor y Certificaciones</Typography>
+            <Typography variant="h6" sx={{ mt: 3 }}>{t('products:sections.valueAndCertifications')}</Typography>
             <TextField
-                label="Valor unitario (USD)"
+                label={t('products:fields.unitValue')}
                 type="number"
                 {...register("valor_unitario_usd", {
-                    required: "El valor unitario es obligatorio",
+                    required: t('products:validation.fieldRequired'),
                     min: { value: 0.01, message: "Debe ser mayor a cero" },
                 })}
                 fullWidth
@@ -227,7 +229,7 @@ export default function ProductoForm() {
                 helperText={errors.valor_unitario_usd?.message as string}
             />
 
-            <FormLabel sx={{ mt: 2 }}>Certificaciones sanitarias</FormLabel>
+            <FormLabel sx={{ mt: 2 }}>{t('products:fields.certifications')}</FormLabel>
             <Controller
                 name="certificaciones"
                 control={control}
@@ -257,11 +259,11 @@ export default function ProductoForm() {
             />
 
             <TextField
-                label="Tiempo de entrega estándar (días)"
+                label={t('products:fields.deliveryTime')}
                 type="number"
                 {...register("tiempo_entrega_dias", {
-                    required: "Campo obligatorio",
-                    min: { value: 0, message: "Debe ser mayor o igual a 0" },
+                    required: t('products:validation.fieldRequired'),
+                    min: { value: 0, message: t('products:validation.minValue') },
                 })}
                 fullWidth
                 margin="normal"
@@ -269,7 +271,7 @@ export default function ProductoForm() {
                 helperText={errors.tiempo_entrega_dias?.message as string}
             />
 
-            <Button type="submit" variant="contained" sx={{ mt: 3 }}>Guardar</Button>
+            <Button type="submit" variant="contained" sx={{ mt: 3 }}>{t('actions.save')}</Button>
         </Box>
     );
 }
