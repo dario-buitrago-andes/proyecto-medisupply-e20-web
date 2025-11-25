@@ -51,10 +51,10 @@ export const handlers = [
   }),
 
   http.post(`${API_URL}/productos`, async ({ request }) => {
-    const body = await request.json();
+    const body = await request.json() as Record<string, any>;
     return HttpResponse.json({
       id: Date.now(),
-      ...body
+      ...(body || {})
     }, { status: 201 });
   }),
 
@@ -87,10 +87,10 @@ export const handlers = [
   }),
 
   http.post(`${API_URL}/planes-venta`, async ({ request }) => {
-    const body = await request.json();
+    const body = await request.json() as Record<string, any>;
     return HttpResponse.json({
       id: Date.now(),
-      ...body
+      ...(body || {})
     }, { status: 201 });
   }),
 
