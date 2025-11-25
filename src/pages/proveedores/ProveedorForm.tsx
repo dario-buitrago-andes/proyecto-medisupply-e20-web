@@ -2,6 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {TextField, Button, Box, Checkbox, FormControlLabel, FormLabel, Typography} from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { ProveedorService } from "../../services/proveedoresService";
 import { CategoriasSuministrosService, CategoriaSuministro } from "../../services/categoriasSuministrosService";
 import { PaisesService, Pais } from "../../services/paisesService";
@@ -49,6 +50,7 @@ const schema: yup.ObjectSchema<ProveedorFormValues> = yup
   .required();
 
 export default function ProveedorForm() {
+    const { t } = useTranslation();
     const { notify } = useNotify();
     const { control, handleSubmit, formState: { errors } } = useForm<ProveedorFormValues>({
         resolver: yupResolver(schema),
@@ -117,13 +119,13 @@ export default function ProveedorForm() {
         cargarCertificaciones();
     }, [notify]);
 
-    if (loading || loadingCategorias || loadingCertificaciones) return <div>Cargando datos...</div>;
+    if (loading || loadingCategorias || loadingCertificaciones) return <div>{t('common:messages.loading')}</div>;
     if (error || errorCategorias || errorCertificaciones) return <div>{error || errorCategorias || errorCertificaciones}</div>;
 
     const onSubmit = async (data: any) => {
         try {
             await ProveedorService.crear(data);
-            notify("Proveedor registrado", "success");
+            notify(t('vendors:messages.createSuccess'), "success");
         } catch (err) {
             const msg = getApiErrorMessage(err);
             notify(msg, "error");
@@ -133,19 +135,19 @@ export default function ProveedorForm() {
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: 500, m: "auto" }}>
             <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3, textAlign: 'center' }}>
-                Registrar Proveedor
+                {t('vendors:create')}
             </Typography>
 
             <Controller
                 name="razon_social"
                 control={control}
                 render={({ field }) => (
-                    <TextField {...field} label="Razón social" fullWidth margin="normal"
+                    <TextField {...field} label={t('vendors:fields.name')} fullWidth margin="normal"
                                error={!!errors.razon_social} helperText={errors.razon_social?.message} />
                 )}
             />
 
-            <FormLabel sx={{ mt: 2 }}>Países de operación</FormLabel>
+            <FormLabel sx={{ mt: 2 }}>{t('vendors:fields.country')}</FormLabel>
             <Controller
                 name="paises_operacion"
                 control={control}
@@ -174,7 +176,7 @@ export default function ProveedorForm() {
                 )}
             />
 
-            <FormLabel sx={{ mt: 2 }}>Certificaciones sanitarias</FormLabel>
+            <FormLabel sx={{ mt: 2 }}>{t('vendors:fields.certifications')}</FormLabel>
             <Controller
                 name="certificaciones_sanitarias"
                 control={control}
@@ -204,7 +206,7 @@ export default function ProveedorForm() {
                 )}
             />
 
-            <FormLabel sx={{ mt: 2 }}>Categorías de suministros</FormLabel>
+            <FormLabel sx={{ mt: 2 }}>{t('vendors:fields.categories')}</FormLabel>
             <Controller
                 name="categorias_suministradas"
                 control={control}
@@ -233,7 +235,7 @@ export default function ProveedorForm() {
                 )}
             />
 
-            <FormLabel sx={{ mt: 2 }}>Capacidad Cadena de Frio</FormLabel>
+            <FormLabel sx={{ mt: 2 }}>{t('vendors:fields.coldChain')}</FormLabel>
             <Controller
                 name="capacidad_cadena_frio"
                 control={control}
@@ -262,7 +264,7 @@ export default function ProveedorForm() {
                 )}
             />
 
-            <Button type="submit" variant="contained">Guardar</Button>
+            <Button type="submit" variant="contained">{t('common:actions.save')}</Button>
         </Box>
     );
 }

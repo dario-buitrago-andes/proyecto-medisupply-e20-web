@@ -1,0 +1,67 @@
+{
+  "title": "Productos",
+  "create": "Registrar Producto",
+  "edit": "Editar Producto",
+  "delete": "Eliminar Producto",
+  "list": "Lista de Productos",
+  "bulkUpload": "Carga Masiva de Productos",
+  "sections": {
+    "basicInfo": "Información Básica",
+    "technicalSheet": "Ficha Técnica",
+    "storageConditions": "Condiciones de Almacenamiento",
+    "organization": "Organización",
+    "valueAndCertifications": "Valor y Certificaciones"
+  },
+  "fields": {
+    "name": "Nombre del Producto",
+    "description": "Descripción",
+    "sku": "SKU",
+    "price": "Precio",
+    "unitValue": "Valor Unitario (USD)",
+    "category": "Categoría",
+    "stock": "Stock",
+    "vendor": "Proveedor",
+    "status": "Estado",
+    "technicalSheetUrl": "URL de Ficha Técnica",
+    "temperature": "Temperatura de Almacenamiento (°C)",
+    "humidity": "Condiciones de Humedad",
+    "light": "Condiciones de Luz",
+    "ventilation": "Condiciones de Ventilación",
+    "security": "Condiciones de Seguridad",
+    "packaging": "Condiciones del Envase",
+    "medicineType": "Tipo de Medicamento",
+    "expirationDate": "Fecha de Vencimiento",
+    "certifications": "Certificaciones",
+    "deliveryTime": "Tiempo de Entrega Estándar (días)"
+  },
+  "medicineTypes": {
+    "controlled": "Controlado",
+    "refrigerated": "Refrigerado",
+    "general": "General"
+  },
+  "status": {
+    "available": "Disponible",
+    "outOfStock": "Agotado",
+    "discontinued": "Descontinuado"
+  },
+  "validation": {
+    "providerRequired": "El proveedor es obligatorio",
+    "medicineTypeRequired": "Seleccione un tipo de medicamento",
+    "fieldRequired": "Campo obligatorio",
+    "minValue": "Debe ser mayor o igual a 0"
+  },
+  "bulkUpload": {
+    "title": "Carga Masiva de Productos",
+    "selectFile": "Seleccionar Archivo CSV",
+    "uploadFile": "Subir Archivo",
+    "processedSuccess": "Carga masiva procesada"
+  },
+  "messages": {
+    "createSuccess": "Producto registrado exitosamente",
+    "updateSuccess": "Producto actualizado exitosamente",
+    "deleteSuccess": "Producto eliminado exitosamente",
+    "deleteConfirm": "¿Está seguro de eliminar este producto?",
+    "bulkUploadSuccess": "Productos cargados exitosamente",
+    "bulkUploadError": "Error al cargar productos"
+  }
+}

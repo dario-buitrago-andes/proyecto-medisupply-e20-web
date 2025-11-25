@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '../test-utils/i18n-test-helper';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';

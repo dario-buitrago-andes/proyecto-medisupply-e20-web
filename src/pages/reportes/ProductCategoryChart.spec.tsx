@@ -6,7 +6,7 @@
  */
 
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "../../test-utils/i18n-test-helper";
 import ProductCategoryChart from "./ProductCategoryChart";
 import { ProductosCategoriaItem } from "./types";
 

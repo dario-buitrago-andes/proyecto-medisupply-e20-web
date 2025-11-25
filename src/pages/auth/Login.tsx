@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import authService from "../../services/authService";
 import "./Login.css";
 
@@ -7,6 +8,7 @@ interface LoginProps {
 }
 
 export default function Login({ onLoginSuccess }: LoginProps) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,7 +25,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Error al iniciar sesión. Verifica tus credenciales."
+          t('auth:login.errors.invalidCredentials')
       );
     } finally {
       setLoading(false);
@@ -33,12 +35,12 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>MediSupply</h1>
-        <h2>Iniciar Sesión</h2>
+        <h1>{t('app:title')}</h1>
+        <h2>{t('auth:login.title')}</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t('auth:login.email')}</label>
             <input
               type="email"
               id="email"
@@ -52,7 +54,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="password">{t('auth:login.password')}</label>
             <input
               type="password"
               id="password"
@@ -68,7 +70,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="login-button" disabled={loading}>
-            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+            {loading ? t('app:loading') : t('auth:login.submit')}
           </button>
         </form>
       </div>

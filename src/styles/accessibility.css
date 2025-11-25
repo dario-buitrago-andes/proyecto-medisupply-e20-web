@@ -1,0 +1,105 @@
+/**
+ * Estilos de accesibilidad para la aplicación
+ * Incluye clases para lectores de pantalla y focus visible
+ */
+
+/* Clase para ocultar elementos visualmente pero mantenerlos accesibles para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Clase para mostrar elementos solo al enfocarlos */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Estilos para indicadores de foco visibles */
+*:focus-visible {
+  outline: 3px solid #1976d2;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Mejorar contraste de botones deshabilitados */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Estilos para enlaces con mejor contraste */
+a {
+  color: #1565c0;
+  text-decoration: underline;
+}
+
+a:hover,
+a:focus {
+  color: #0d47a1;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #673ab7;
+}
+
+/* Región live para anuncios de lectores de pantalla */
+.live-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Estilos para reducir movimiento (respeto a preferencias del usuario) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mejorar contraste en modo de alto contraste */
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor !important;
+  }
+  
+  button,
+  a {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Estilos para tooltips accesibles */
+[role="tooltip"] {
+  position: absolute;
+  z-index: 9999;
+  background-color: #333;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  max-width: 200px;
+}

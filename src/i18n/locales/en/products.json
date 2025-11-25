@@ -1,0 +1,67 @@
+{
+  "title": "Products",
+  "create": "Register Product",
+  "edit": "Edit Product",
+  "delete": "Delete Product",
+  "list": "Product List",
+  "bulkUpload": "Bulk Product Upload",
+  "sections": {
+    "basicInfo": "Basic Information",
+    "technicalSheet": "Technical Sheet",
+    "storageConditions": "Storage Conditions",
+    "organization": "Organization",
+    "valueAndCertifications": "Value and Certifications"
+  },
+  "fields": {
+    "name": "Product Name",
+    "description": "Description",
+    "sku": "SKU",
+    "price": "Price",
+    "unitValue": "Unit Value (USD)",
+    "category": "Category",
+    "stock": "Stock",
+    "vendor": "Supplier",
+    "status": "Status",
+    "technicalSheetUrl": "Technical Sheet URL",
+    "temperature": "Storage Temperature (°C)",
+    "humidity": "Humidity Conditions",
+    "light": "Light Conditions",
+    "ventilation": "Ventilation Conditions",
+    "security": "Security Conditions",
+    "packaging": "Packaging Conditions",
+    "medicineType": "Medicine Type",
+    "expirationDate": "Expiration Date",
+    "certifications": "Certifications",
+    "deliveryTime": "Standard Delivery Time (days)"
+  },
+  "medicineTypes": {
+    "controlled": "Controlled",
+    "refrigerated": "Refrigerated",
+    "general": "General"
+  },
+  "status": {
+    "available": "Available",
+    "outOfStock": "Out of Stock",
+    "discontinued": "Discontinued"
+  },
+  "validation": {
+    "providerRequired": "Supplier is required",
+    "medicineTypeRequired": "Select a medicine type",
+    "fieldRequired": "Required field",
+    "minValue": "Must be greater than or equal to 0"
+  },
+  "bulkUpload": {
+    "title": "Bulk Product Upload",
+    "selectFile": "Select CSV File",
+    "uploadFile": "Upload File",
+    "processedSuccess": "Bulk upload processed"
+  },
+  "messages": {
+    "createSuccess": "Product registered successfully",
+    "updateSuccess": "Product updated successfully",
+    "deleteSuccess": "Product deleted successfully",
+    "deleteConfirm": "Are you sure you want to delete this product?",
+    "bulkUploadSuccess": "Products uploaded successfully",
+    "bulkUploadError": "Error uploading products"
+  }
+}
