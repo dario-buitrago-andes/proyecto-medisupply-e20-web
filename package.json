@@ -75,16 +75,6 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(react-router|react-router-dom|@remix-run|axios|msw|@mswjs|until-async|web-streams-polyfill|@mswjs/interceptors)/)"
     ],
-    // Coverage threshold comentado - objetivo es ≥80% pero no bloquea el build
-    // Se puede habilitar cuando se alcance el objetivo
-    // "coverageThreshold": {
-    //   "global": {
-    //     "branches": 80,
-    //     "functions": 80,
-    //     "lines": 80,
-    //     "statements": 80
-    //   }
-    // },
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/**/*.d.ts",
