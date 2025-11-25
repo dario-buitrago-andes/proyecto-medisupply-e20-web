@@ -4,9 +4,11 @@
  * 
  * Estos tests verifican la integración entre servicios y APIs,
  * probando el flujo completo de creación y listado de recursos.
+ * Usa MSW (Mock Service Worker) para mocks determinísticos.
  */
 
 import '@testing-library/jest-dom';
+import './setup'; // Setup MSW
 import { ProductoService } from '../services/productosService';
 import { VendedorService } from '../services/vendedoresService';
 import { ProveedorService } from '../services/proveedoresService';

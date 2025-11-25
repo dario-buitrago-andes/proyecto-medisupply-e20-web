@@ -39,6 +39,7 @@ jobs:
       - name: Build de producción
         run: npm run build
         env:
+          NODE_ENV: production
           CI: true
           REACT_APP_API_DOMAIN: ${{ secrets.REACT_APP_API_DOMAIN }}
 
