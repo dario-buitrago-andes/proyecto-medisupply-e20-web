@@ -18,10 +18,11 @@ if (shouldUseMSW) {
       serviceWorker: {
         url: '/mockServiceWorker.js',
       },
-    }).then(() => {
-      console.log('✅ MSW started successfully for E2E tests');
     }).catch((error) => {
-      console.warn('⚠️ MSW failed to start:', error);
+      // Only log errors in development
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('⚠️ MSW failed to start:', error);
+      }
     });
   });
 }
