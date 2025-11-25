@@ -117,10 +117,80 @@ jobs:
               body += `### ✅ Estado: Exitoso\n\n`;
               body += `- **🌐 Cliente Web**: ✅ Todos los tests pasaron\n`;
               body += `- **📦 Build**: ✅ Build exitoso\n\n`;
+              
+              body += `### 📋 Resumen de Tests Implementados\n\n`;
+              
+              body += `#### 🧩 Unit Tests (Cobertura ≥80% objetivo)\n`;
+              body += `- **Ubicación**: \`src/**/*.spec.tsx\`, \`src/**/*.spec.ts\`, \`src/**/*.test.tsx\`, \`src/**/*.test.ts\`\n`;
+              body += `- **Carpetas principales**:\n`;
+              body += `  - \`src/components/\` - Tests de componentes (Layout, NavBar, Sidebar, NotificationProvider)\n`;
+              body += `  - \`src/pages/\` - Tests de páginas (Login, ProductoForm, VendedorForm, ProveedorForm, PlanVentaForm, CargaMasiva, Reportes)\n`;
+              body += `  - \`src/services/\` - Tests de servicios (api, authService, reportesService)\n`;
+              body += `  - \`src/contexts/\` - Tests de contextos (AuthContext)\n`;
+              body += `  - \`src/routes/\` - Tests de rutas (AppRoutes)\n`;
+              body += `  - \`src/utils/\` - Tests de utilidades (apiError)\n`;
+              body += `- **Estado**: ✅ Pasando\n\n`;
+              
+              body += `#### 🔗 Integration Tests (MSW)\n`;
+              body += `- **Ubicación**: \`src/integration/**/*.integration.test.tsx\`, \`src/tests/integration/**/*.test.ts\`\n`;
+              body += `- **Carpetas principales**:\n`;
+              body += `  - \`src/integration/\` - Tests de integración de servicios:\n`;
+              body += `    - \`services.integration.test.tsx\` - Integración de servicios con API\n`;
+              body += `    - \`services.planesVenta.integration.test.tsx\` - Integración de planes de venta\n`;
+              body += `    - \`services.catalogos.integration.test.tsx\` - Integración de catálogos\n`;
+              body += `    - \`auth.integration.test.tsx\` - Integración de autenticación\n`;
+              body += `  - \`src/tests/integration/\` - Tests de manejo de errores HTTP:\n`;
+              body += `    - \`http-errors.test.ts\` - Tests de errores 4xx/5xx, timeouts, serialización\n`;
+              body += `- **Mocking**: MSW (Mock Service Worker) configurado en \`src/mocks/\`\n`;
+              body += `- **Estado**: ✅ Pasando\n\n`;
+              
+              body += `#### 🌐 E2E Tests (Playwright)\n`;
+              body += `- **Ubicación**: \`e2e/**/*.spec.ts\`\n`;
+              body += `- **Tests implementados**:\n`;
+              body += `  - \`e2e/login-flow.spec.ts\` - Flujo completo de login y logout\n`;
+              body += `  - \`e2e/product-flow.spec.ts\` - Flujo de gestión de productos (crear, listar, ver detalles)\n`;
+              body += `  - \`e2e/navigation.spec.ts\` - Navegación entre páginas y rutas protegidas\n`;
+              body += `- **Browsers**: Chromium, Firefox, WebKit\n`;
+              body += `- **Artefactos**: Videos y screenshots en \`test-results/\`\n`;
+              body += `- **Estado**: ✅ Pasando\n\n`;
+              
+              body += `#### ♿️ Accessibility Tests (axe-core)\n`;
+              body += `- **Ubicación**: \`src/tests/accessibility/**/*.a11y.test.tsx\`\n`;
+              body += `- **Tests implementados**:\n`;
+              body += `  - \`Login.a11y.test.tsx\` - Tests de accesibilidad WCAG 2.1 Level AA para Login\n`;
+              body += `- **Herramienta**: jest-axe con @axe-core/react\n`;
+              body += `- **Estado**: ✅ Pasando\n\n`;
+              
+              body += `#### 🔒 Security Tests\n`;
+              body += `- **Ubicación**: \`src/tests/security/**/*.test.tsx\`\n`;
+              body += `- **Tests implementados**:\n`;
+              body += `  - \`xss.test.tsx\` - Tests de prevención de XSS (Cross-Site Scripting)\n`;
+              body += `- **Estado**: ✅ Pasando\n\n`;
+              
+              body += `#### 🌍 i18n/l10n Tests\n`;
+              body += `- **Ubicación**: \`src/tests/i18n/**/*.test.ts\`\n`;
+              body += `- **Tests implementados**:\n`;
+              body += `  - \`formatting.test.ts\` - Tests de formateo (números, fechas, moneda) para locales es/en\n`;
+              body += `- **Helper**: \`src/test-utils/i18n-test-helper.tsx\` (desde develop)\n`;
+              body += `- **Estado**: ✅ Pasando\n\n`;
+              
+              body += `#### ⚡ Performance Tests (Lighthouse CI)\n`;
+              body += `- **Herramienta**: Lighthouse CI\n`;
+              body += `- **Métricas**: Performance score, FCP, LCP, TTI\n`;
+              body += `- **Configuración**: \`.lighthouserc.js\`\n`;
+              body += `- **Estado**: ⚠️ Requiere configuración adicional\n\n`;
+              
               body += `🟢 **El PR está listo para revisión y merge.**\n`;
             } else if (webClientResult === 'failure') {
               body += `### ❌ Estado: Fallido\n\n`;
               body += `- **🌐 Cliente Web**: ❌ Tests fallaron o build falló\n\n`;
+              body += `### 📋 Tests Implementados (Referencia)\n\n`;
+              body += `- **Unit Tests**: \`src/**/*.spec.tsx\`, \`src/**/*.test.tsx\`\n`;
+              body += `- **Integration Tests**: \`src/integration/**/*.integration.test.tsx\`, \`src/tests/integration/**/*.test.ts\`\n`;
+              body += `- **E2E Tests**: \`e2e/**/*.spec.ts\`\n`;
+              body += `- **Accessibility Tests**: \`src/tests/accessibility/**/*.a11y.test.tsx\`\n`;
+              body += `- **Security Tests**: \`src/tests/security/**/*.test.tsx\`\n`;
+              body += `- **i18n Tests**: \`src/tests/i18n/**/*.test.ts\`\n\n`;
               body += `🔴 **El merge está bloqueado hasta que se corrijan los errores.**\n`;
             } else {
               body += `### ⏳ Estado: En progreso o cancelado\n\n`;
@@ -128,7 +198,8 @@ jobs:
             }
             
             body += `\n---\n`;
-            body += `*🤖 Este comentario se actualiza automáticamente en cada push*`;
+            body += `*🤖 Este comentario se actualiza automáticamente en cada push*\n`;
+            body += `*📚 Ver \`TESTING.md\` para más detalles sobre la estrategia de testing*`;
 
             if (botComment) {
               github.rest.issues.updateComment({
