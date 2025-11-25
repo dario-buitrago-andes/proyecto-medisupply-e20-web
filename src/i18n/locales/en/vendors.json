@@ -1,0 +1,63 @@
+{
+  "title": "Suppliers",
+  "create": "Register Supplier",
+  "edit": "Edit Supplier",
+  "delete": "Delete Supplier",
+  "list": "Supplier List",
+  "fields": {
+    "name": "Business Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "country": "Operating Countries",
+    "status": "Status",
+    "createdAt": "Created At",
+    "categories": "Supply Categories",
+    "coldChain": "Cold Chain Capacity",
+    "certifications": "Sanitary Certifications"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "validation": {
+    "nameRequired": "Business name is required",
+    "selectCountry": "Select at least one country",
+    "selectCertification": "Select at least one certification"
+  },
+  "messages": {
+    "createSuccess": "Supplier registered successfully",
+    "updateSuccess": "Supplier updated successfully",
+    "deleteSuccess": "Supplier deleted successfully",
+    "deleteConfirm": "Are you sure you want to delete this supplier?"
+  },
+  "sellers": {
+    "title": "Sellers",
+    "create": "Register Seller",
+    "edit": "Edit Seller",
+    "list": "Sellers List",
+    "fields": {
+      "fullName": "Full Name",
+      "corporateEmail": "Corporate Email",
+      "assignedCountry": "Assigned Country",
+      "status": "Status"
+    },
+    "validation": {
+      "nameRequired": "Full name is required",
+      "nameOnlyLetters": "Only letters and spaces",
+      "emailRequired": "Corporate email is required",
+      "emailInvalid": "Invalid email",
+      "countryRequired": "Country is required",
+      "selectCountry": "Select a country",
+      "statusRequired": "Status is required",
+      "statusInvalid": "Invalid status"
+    },
+    "messages": {
+      "createSuccess": "Seller created successfully",
+      "updateSuccess": "Seller updated successfully",
+      "deleteSuccess": "Seller deleted successfully",
+      "loadingCountries": "Loading countries...",
+      "errorLoadingCountries": "Error loading countries. You can continue with the form."
+    }
+  }
+}

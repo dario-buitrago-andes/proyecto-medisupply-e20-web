@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button, Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { ProductoService } from "../../services/productosService";
 import { useNotify } from "../../components/NotificationProvider";
 import { getApiErrorMessage } from "../../utils/apiError";
 
 export default function CargaMasiva() {
+    const { t } = useTranslation();
     const [file, setFile] = useState<File | null>(null);
     const { notify } = useNotify();
 
@@ -12,7 +14,7 @@ export default function CargaMasiva() {
         if (!file) return;
         try {
             await ProductoService.cargaMasiva(file);
-            notify("Carga masiva procesada", "success");
+            notify(t('products:bulkUpload.processedSuccess'), "success");
         } catch (e) {
             notify(getApiErrorMessage(e), "error");
         }
@@ -25,7 +27,7 @@ export default function CargaMasiva() {
                 component="label"
                 sx={{ mb: 2 }}
             >
-                Seleccionar archivo CSV
+                {t('products:bulkUpload.selectFile')}
                 <input
                     type="file"
                     hidden
@@ -34,7 +36,7 @@ export default function CargaMasiva() {
                 />
             </Button>
             <br />
-            <Button onClick={handleUpload} variant="contained" disabled={!file}>Subir archivo</Button>
+            <Button onClick={handleUpload} variant="contained" disabled={!file}>{t('products:bulkUpload.uploadFile')}</Button>
         </Box>
     );
 }

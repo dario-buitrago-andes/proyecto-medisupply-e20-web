@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 import { VentasPorRegionItem } from "./types";
 
 interface RegionalSalesChartProps {
@@ -15,6 +16,8 @@ interface RegionalSalesChartProps {
 }
 
 export default function RegionalSalesChart({ data }: RegionalSalesChartProps) {
+  const { t } = useTranslation();
+  
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("es-CO", {
       style: "currency",
@@ -29,10 +32,10 @@ export default function RegionalSalesChart({ data }: RegionalSalesChartProps) {
       return (
         <Paper sx={{ p: 2, boxShadow: 3 }}>
           <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            {`País: ${label}`}
+            {`${t('reports:regionalSales.zone')}: ${label}`}
           </Typography>
           <Typography variant="body2" color="primary">
-            {`Ventas: ${formatCurrency(payload[0].value)}`}
+            {`${t('reports:regionalSales.sales')}: ${formatCurrency(payload[0].value)}`}
           </Typography>
         </Paper>
       );
@@ -44,7 +47,7 @@ export default function RegionalSalesChart({ data }: RegionalSalesChartProps) {
     return (
       <Box sx={{ textAlign: "center", py: 4 }}>
         <Typography variant="body1" color="text.secondary">
-          No hay datos de ventas por región disponibles
+          {t('reports:regionalSales.noData')}
         </Typography>
       </Box>
     );
@@ -53,7 +56,7 @@ export default function RegionalSalesChart({ data }: RegionalSalesChartProps) {
   return (
     <Box sx={{ mb: 4 }}>
       <Typography variant="h6" component="h3" gutterBottom sx={{ mb: 2 }}>
-        🗺️ Ventas por Región
+        🗺️ {t('reports:regionalSales.title')}
       </Typography>
       <Paper sx={{ p: 3, boxShadow: 2 }}>
         <ResponsiveContainer width="100%" height={300}>

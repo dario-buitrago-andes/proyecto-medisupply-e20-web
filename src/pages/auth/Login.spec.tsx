@@ -19,7 +19,7 @@ jest.mock("../../services/authService");
 
 import React from "react";
 import "@testing-library/jest-dom";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "../../test-utils/i18n-test-helper";
 import userEvent from "@testing-library/user-event";
 import Login from "./Login";
 import authService from "../../services/authService";
@@ -53,7 +53,7 @@ describe("Login", () => {
     it("renderiza el campo de email con sus atributos", () => {
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+      const emailInput = screen.getByLabelText(/correo electrónico/i) as HTMLInputElement;
       
       expect(emailInput).toBeInTheDocument();
       expect(emailInput.type).toBe("email");
@@ -79,7 +79,7 @@ describe("Login", () => {
     it("renderiza el botón de envío", () => {
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       expect(submitButton).toBeInTheDocument();
       expect(submitButton).toHaveClass("login-button");
@@ -89,7 +89,7 @@ describe("Login", () => {
     it("los inputs tienen labels asociados correctamente", () => {
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailLabel = screen.getByText("Email");
+      const emailLabel = screen.getByText("Correo Electrónico");
       const passwordLabel = screen.getByText("Contraseña");
       
       expect(emailLabel).toHaveAttribute("for", "email");
@@ -101,7 +101,7 @@ describe("Login", () => {
     it("permite escribir en el campo de email", async () => {
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+      const emailInput = screen.getByLabelText(/correo electrónico/i) as HTMLInputElement;
       
       await userEvent.type(emailInput, "test@example.com");
       
@@ -121,7 +121,7 @@ describe("Login", () => {
     it("limpia los campos cuando se cambian", async () => {
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+      const emailInput = screen.getByLabelText(/correo electrónico/i) as HTMLInputElement;
       
       await userEvent.type(emailInput, "first@test.com");
       expect(emailInput.value).toBe("first@test.com");
@@ -138,9 +138,9 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       await userEvent.type(emailInput, "user@test.com");
       await userEvent.type(passwordInput, "password123");
@@ -159,9 +159,9 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       await userEvent.type(emailInput, "user@test.com");
       await userEvent.type(passwordInput, "password123");
@@ -177,7 +177,7 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const form = screen.getByRole("button", { name: /iniciar sesión/i }).closest("form");
+      const form = screen.getByRole("button", { name: /ingresar/i }).closest("form");
       const submitEvent = new Event("submit", { bubbles: true, cancelable: true });
       const preventDefaultSpy = jest.spyOn(submitEvent, "preventDefault");
       
@@ -195,18 +195,18 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       await userEvent.type(emailInput, "user@test.com");
       await userEvent.type(passwordInput, "password123");
       await userEvent.click(submitButton);
       
-      expect(screen.getByText("Iniciando sesión...")).toBeInTheDocument();
+      expect(screen.getByText("Cargando...")).toBeInTheDocument();
       
       await waitFor(() => {
-        expect(screen.queryByText("Iniciando sesión...")).not.toBeInTheDocument();
+        expect(screen.queryByText("Cargando...")).not.toBeInTheDocument();
       });
     });
 
@@ -217,9 +217,9 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+      const emailInput = screen.getByLabelText(/correo electrónico/i) as HTMLInputElement;
       const passwordInput = screen.getByLabelText(/contraseña/i) as HTMLInputElement;
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       await userEvent.type(emailInput, "user@test.com");
       await userEvent.type(passwordInput, "password123");
@@ -241,16 +241,16 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       await userEvent.type(emailInput, "user@test.com");
       await userEvent.type(passwordInput, "wrongpassword");
       await userEvent.click(submitButton);
       
       await waitFor(() => {
-        expect(screen.getByText(/error al iniciar sesión/i)).toBeInTheDocument();
+        expect(screen.getByText(/credenciales inválidas/i)).toBeInTheDocument();
       });
     });
 
@@ -261,9 +261,9 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       await userEvent.type(emailInput, "user@test.com");
       await userEvent.type(passwordInput, "wrongpassword");
@@ -279,16 +279,16 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       await userEvent.type(emailInput, "user@test.com");
       await userEvent.type(passwordInput, "wrongpassword");
       await userEvent.click(submitButton);
       
       await waitFor(() => {
-        const errorMessage = screen.getByText(/error al iniciar sesión/i);
+        const errorMessage = screen.getByText(/credenciales inválidas/i);
         expect(errorMessage).toHaveClass("error-message");
       });
     });
@@ -300,9 +300,9 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       // Primer intento - falla
       await userEvent.type(emailInput, "user@test.com");
@@ -310,7 +310,7 @@ describe("Login", () => {
       await userEvent.click(submitButton);
       
       await waitFor(() => {
-        expect(screen.getByText(/error al iniciar sesión/i)).toBeInTheDocument();
+        expect(screen.getByText(/credenciales inválidas/i)).toBeInTheDocument();
       });
       
       // Segundo intento - éxito
@@ -319,7 +319,7 @@ describe("Login", () => {
       await userEvent.click(submitButton);
       
       await waitFor(() => {
-        expect(screen.queryByText(/error al iniciar sesión/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/credenciales inválidas/i)).not.toBeInTheDocument();
       });
     });
 
@@ -328,16 +328,16 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
-      const submitButton = screen.getByRole("button", { name: /iniciar sesión/i });
+      const submitButton = screen.getByRole("button", { name: /ingresar/i });
       
       await userEvent.type(emailInput, "user@test.com");
       await userEvent.type(passwordInput, "wrongpassword");
       await userEvent.click(submitButton);
       
       await waitFor(() => {
-        expect(screen.getByText(/error al iniciar sesión/i)).toBeInTheDocument();
+        expect(screen.getByText(/credenciales inválidas/i)).toBeInTheDocument();
       });
       
       expect(mockOnLoginSuccess).not.toHaveBeenCalled();
@@ -350,7 +350,7 @@ describe("Login", () => {
       
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
       
       // Navegar con Tab
@@ -375,7 +375,7 @@ describe("Login", () => {
     it("los inputs tienen el atributo autoComplete correcto", () => {
       render(<Login onLoginSuccess={mockOnLoginSuccess} />);
       
-      const emailInput = screen.getByLabelText(/email/i);
+      const emailInput = screen.getByLabelText(/correo electrónico/i);
       const passwordInput = screen.getByLabelText(/contraseña/i);
       
       expect(emailInput).toHaveAttribute("autocomplete", "email");

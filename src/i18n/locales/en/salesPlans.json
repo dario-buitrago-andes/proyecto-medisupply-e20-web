@@ -1,0 +1,43 @@
+{
+  "title": "Sales Plans",
+  "create": "Register Sales Plan",
+  "edit": "Edit Sales Plan",
+  "list": "Sales Plans List",
+  "fields": {
+    "seller": "Seller",
+    "period": "Period",
+    "year": "Year",
+    "country": "Country",
+    "targetProducts": "Target Products",
+    "monetaryGoal": "Monetary Goal (USD)"
+  },
+  "placeholders": {
+    "selectSeller": "Select a seller",
+    "selectCountry": "Select a country"
+  },
+  "periods": {
+    "Q1": "Q1",
+    "Q2": "Q2",
+    "Q3": "Q3",
+    "Q4": "Q4"
+  },
+  "validation": {
+    "sellerRequired": "Seller is required",
+    "periodRequired": "Period is required",
+    "periodInvalid": "Select a valid period",
+    "yearRequired": "Year is required",
+    "yearMustBeNumeric": "Year must be numeric",
+    "yearMust4Digits": "Must have 4 digits",
+    "yearOutOfRange": "Year out of range (1900–2100)",
+    "countryRequired": "Country is required",
+    "productsRequired": "Must select at least one product",
+    "goalMustBePositive": "Must be greater than 0",
+    "goalGreaterThanZero": "Monetary goal must be greater than 0"
+  },
+  "messages": {
+    "createSuccess": "Sales plan created successfully",
+    "updateSuccess": "Sales plan updated successfully",
+    "deleteSuccess": "Sales plan deleted successfully",
+    "deleteConfirm": "Are you sure you want to delete this sales plan?"
+  }
+}

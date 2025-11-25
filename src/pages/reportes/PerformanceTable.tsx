@@ -12,6 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { DesempenoVendedorRow } from "./types";
 
 interface PerformanceTableProps {
@@ -19,6 +20,7 @@ interface PerformanceTableProps {
 }
 
 export default function PerformanceTable({ data }: PerformanceTableProps) {
+  const { t } = useTranslation();
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(5); // 5 registros por página
 
@@ -37,25 +39,26 @@ export default function PerformanceTable({ data }: PerformanceTableProps) {
   const paginatedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const getStatusColor = (estado: string) => {
-    switch (estado) {
-      case "OK":
-        return { color: "success", label: "✅ OK" };
-      case "HIGH":
-        return { color: "info", label: "🔵 Alto" };
-      case "WARN":
-        return { color: "warning", label: "⚠️ Advertencia" };
-      case "LOW":
-        return { color: "error", label: "🔴 Bajo" };
-      default:
-        return { color: "default", label: estado };
-    }
+    const statusKey = estado as keyof typeof statusMap;
+    const statusMap = {
+      "OK": { color: "success", emoji: "✅" },
+      "HIGH": { color: "info", emoji: "🔵" },
+      "WARN": { color: "warning", emoji: "⚠️" },
+      "LOW": { color: "error", emoji: "🔴" },
+    };
+    
+    const config = statusMap[statusKey] || { color: "default", emoji: "" };
+    return { 
+      color: config.color, 
+      label: `${config.emoji} ${t(`reports:status.${estado}`, { defaultValue: estado })}` 
+    };
   };
 
   if (data.length === 0) {
     return (
       <Box sx={{ textAlign: "center", py: 4 }}>
         <Typography variant="body1" color="text.secondary">
-          No hay datos de desempeño de vendedores disponibles
+          {t('reports:performance.noData')}
         </Typography>
       </Box>
     );
@@ -64,22 +67,22 @@ export default function PerformanceTable({ data }: PerformanceTableProps) {
   return (
     <Box sx={{ mb: 4 }}>
       <Typography variant="h6" component="h3" gutterBottom sx={{ mb: 2 }}>
-        👥 Desempeño por Vendedor
+        👥 {t('reports:performance.title')}
       </Typography>
       <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
         <Table>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-              <TableCell sx={{ fontWeight: "bold" }}>Vendedor</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>País</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>{t('reports:performance.vendor')}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>{t('reports:performance.country')}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }} align="right">
-                Pedidos
+                {t('reports:performance.orders')}
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }} align="right">
-                Ventas (USD)
+                {t('reports:performance.sales')}
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }} align="center">
-                Estado
+                {t('reports:performance.status')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -134,9 +137,9 @@ export default function PerformanceTable({ data }: PerformanceTableProps) {
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           rowsPerPageOptions={[5]}
-          labelRowsPerPage="Registros por página:"
+          labelRowsPerPage={t('reports:performance.rowsPerPage')}
           labelDisplayedRows={({ from, to, count }) => 
-            `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`
+            `${from}-${to} de ${count !== -1 ? count : `${to}+`}`
           }
           sx={{
             borderTop: "1px solid #e0e0e0",

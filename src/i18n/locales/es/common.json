@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "MediSupply",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "welcome": "Bienvenido"
+  },
+  "actions": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "back": "Volver",
+    "changeLanguage": "Cambiar idioma",
+    "submit": "Enviar",
+    "close": "Cerrar",
+    "view": "Ver",
+    "download": "Descargar"
+  },
+  "none": "Ninguno",
+  "navigation": {
+    "home": "Inicio",
+    "vendors": "Vendedores",
+    "suppliers": "Proveedores",
+    "products": "Productos",
+    "reports": "Reportes",
+    "salesPlans": "Planes de Venta",
+    "logout": "Cerrar Sesión",
+    "bulkUpload": "Carga Masiva"
+  },
+  "validation": {
+    "required": "Este campo es requerido",
+    "email": "Email inválido",
+    "minLength": "Mínimo {{count}} caracteres",
+    "maxLength": "Máximo {{count}} caracteres",
+    "minValue": "Valor mínimo {{value}}",
+    "maxValue": "Valor máximo {{value}}",
+    "invalidFormat": "Formato inválido",
+    "mustBePositive": "Debe ser un número positivo"
+  },
+  "accessibility": {
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "mainContent": "Contenido principal",
+    "navigation": "Navegación",
+    "skipToMainContent": "Saltar al contenido principal",
+    "userMenu": "Menú de usuario",
+    "languageSelector": "Selector de idioma"
+  },
+  "messages": {
+    "confirmDelete": "¿Está seguro de eliminar este elemento?",
+    "operationSuccess": "Operación realizada con éxito",
+    "operationError": "Error al realizar la operación",
+    "noData": "No hay datos disponibles",
+    "loading": "Cargando datos..."
+  }
+}

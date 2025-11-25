@@ -1,0 +1,105 @@
+{
+  "title": "Reportes de Ventas",
+  "subtitle": "Análisis y estadísticas de ventas",
+  "filters": {
+    "title": "Filtros",
+    "period": "Período de Tiempo",
+    "country": "País",
+    "zone": "Zona Geográfica",
+    "vendor": "Vendedor",
+    "category": "Categoría de Producto",
+    "reportType": "Tipo de Reporte",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Fin",
+    "apply": "Generar Reporte",
+    "clear": "Limpiar",
+    "showFilters": "Mostrar Filtros",
+    "hideFilters": "Ocultar Filtros",
+    "selectVendor": "Selecciona un vendedor (opcional)",
+    "selectCountry": "Selecciona países",
+    "selectZone": "Selecciona zonas geográficas",
+    "selectCategory": "Selecciona categorías de productos"
+  },
+  "periods": {
+    "MES_ACTUAL": "Mes Actual",
+    "TRIMESTRE_ACTUAL": "Trimestre Actual",
+    "ANIO_ACTUAL": "Año Actual",
+    "PERSONALIZADO": "Personalizado"
+  },
+  "reportTypes": {
+    "DESEMPENO_VENDEDOR": "Desempeño por Vendedor",
+    "VENTAS_POR_PRODUCTO": "Ventas por Producto",
+    "CUMPLIMIENTO_METAS": "Cumplimiento de Metas",
+    "VENTAS_POR_ZONA": "Ventas por Zona"
+  },
+  "kpi": {
+    "totalSales": "Ventas Totales",
+    "monthlyOrders": "Pedidos del Mes",
+    "orders": "pedidos",
+    "goalCompletion": "Cumplimiento",
+    "averageDeliveryTime": "Tiempo Entrega Promedio",
+    "hours": "horas"
+  },
+  "goalVsSales": {
+    "title": "Meta vs Ventas",
+    "goalTarget": "Meta Objetivo",
+    "totalSales": "Ventas Totales",
+    "progress": "Progreso",
+    "goalAchieved": "Meta Alcanzada",
+    "inProgress": "En Progreso",
+    "exceeded": "¡Superaste la meta por {{amount}}!",
+    "remaining": "Faltan {{amount}} para alcanzar la meta"
+  },
+  "performance": {
+    "title": "Desempeño por Vendedor",
+    "vendor": "Vendedor",
+    "country": "País",
+    "orders": "Pedidos",
+    "sales": "Ventas (USD)",
+    "status": "Estado",
+    "noData": "No hay datos de desempeño de vendedores disponibles",
+    "rowsPerPage": "Registros por página:",
+    "displayedRows": "{{from}}-{{to}} de {{count}}"
+  },
+  "regionalSales": {
+    "title": "Ventas por Región",
+    "country": "País",
+    "sales": "Ventas",
+    "zone": "Zona",
+    "noData": "No hay datos de ventas por región disponibles"
+  },
+  "productCategory": {
+    "title": "Productos por Categoría",
+    "category": "Categoría",
+    "units": "Unidades",
+    "revenue": "Ingresos (USD)",
+    "percentage": "Porcentaje",
+    "noData": "No hay datos de productos por categoría disponibles"
+  },
+  "status": {
+    "OK": "OK",
+    "HIGH": "Alto",
+    "WARN": "Advertencia",
+    "LOW": "Bajo"
+  },
+  "zones": {
+    "Norte": "Norte",
+    "Centro": "Centro",
+    "Sur": "Sur"
+  },
+  "validation": {
+    "periodRequired": "Período de tiempo es requerido",
+    "reportTypeRequired": "Debe seleccionar al menos un tipo de reporte",
+    "segmentationRequired": "Debe seleccionar al menos un filtro: vendedor, país o zona geográfica",
+    "customDatesRequired": "Debe indicar fecha_inicio y fecha_fin para período PERSONALIZADO",
+    "dateRangeInvalid": "fecha_fin debe ser mayor a fecha_inicio",
+    "dateRangeMaxExceeded": "El rango máximo es de 2 años (730 días)"
+  },
+  "messages": {
+    "noData": "Configure los filtros y haga clic en \"Generar Reporte\" para visualizar los datos de ventas.",
+    "noDataForFilters": "No hay datos disponibles para los filtros seleccionados",
+    "loading": "Cargando reporte...",
+    "error": "Error al cargar el reporte",
+    "reportGenerated": "Reporte generado exitosamente"
+  }
+}
