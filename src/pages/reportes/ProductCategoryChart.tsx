@@ -10,6 +10,7 @@ import {
   TableRow,
   Chip
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { ProductosCategoriaItem } from "./types";
 
 interface ProductCategoryTableProps {
@@ -17,6 +18,8 @@ interface ProductCategoryTableProps {
 }
 
 export default function ProductCategoryChart({ data }: ProductCategoryTableProps) {
+  const { t } = useTranslation();
+  
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("es-CO", {
       style: "currency",
@@ -40,7 +43,7 @@ export default function ProductCategoryChart({ data }: ProductCategoryTableProps
     return (
       <Box sx={{ textAlign: "center", py: 4 }}>
         <Typography variant="body1" color="text.secondary">
-          No hay datos de productos por categoría disponibles
+          {t('reports:productCategory.noData')}
         </Typography>
       </Box>
     );
@@ -52,23 +55,23 @@ export default function ProductCategoryChart({ data }: ProductCategoryTableProps
   return (
     <Box sx={{ mb: 4 }}>
       <Typography variant="h6" component="h3" gutterBottom sx={{ mb: 2 }}>
-        📦 Productos por Categoría
+        📦 {t('reports:productCategory.title')}
       </Typography>
       <TableContainer component={Paper} sx={{ boxShadow: 2 }}>
         <Table sx={{ minWidth: 650 }} aria-label="tabla de productos por categoría">
           <TableHead>
             <TableRow sx={{ backgroundColor: "grey.50" }}>
               <TableCell sx={{ fontWeight: "bold", fontSize: "0.875rem" }}>
-                Categoría
+                {t('reports:productCategory.category')}
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold", fontSize: "0.875rem" }}>
-                Unidades
+                {t('reports:productCategory.units')}
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold", fontSize: "0.875rem" }}>
-                Ingresos (USD)
+                {t('reports:productCategory.revenue')}
               </TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.875rem" }}>
-                Porcentaje
+                {t('reports:productCategory.percentage')}
               </TableCell>
             </TableRow>
           </TableHead>

@@ -1,6 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "../../test-utils/i18n-test-helper";
 import userEvent from "@testing-library/user-event";
 
 // Mock del servicio

@@ -1,0 +1,43 @@
+{
+  "title": "Planes de Venta",
+  "create": "Registrar Plan de Venta",
+  "edit": "Editar Plan de Venta",
+  "list": "Lista de Planes de Venta",
+  "fields": {
+    "seller": "Vendedor",
+    "period": "Periodo",
+    "year": "Año",
+    "country": "País",
+    "targetProducts": "Productos Objetivo",
+    "monetaryGoal": "Meta Monetaria (USD)"
+  },
+  "placeholders": {
+    "selectSeller": "Selecciona un vendedor",
+    "selectCountry": "Selecciona un país"
+  },
+  "periods": {
+    "Q1": "Q1",
+    "Q2": "Q2",
+    "Q3": "Q3",
+    "Q4": "Q4"
+  },
+  "validation": {
+    "sellerRequired": "El vendedor es obligatorio",
+    "periodRequired": "El periodo es obligatorio",
+    "periodInvalid": "Seleccione un periodo válido",
+    "yearRequired": "El año es obligatorio",
+    "yearMustBeNumeric": "El año debe ser numérico",
+    "yearMust4Digits": "Debe tener 4 dígitos",
+    "yearOutOfRange": "Año fuera de rango (1900–2100)",
+    "countryRequired": "El país es obligatorio",
+    "productsRequired": "Debe seleccionar al menos un producto",
+    "goalMustBePositive": "Debe ser un valor mayor a 0",
+    "goalGreaterThanZero": "La meta monetaria debe ser mayor a 0"
+  },
+  "messages": {
+    "createSuccess": "Plan de venta creado correctamente",
+    "updateSuccess": "Plan de venta actualizado exitosamente",
+    "deleteSuccess": "Plan de venta eliminado exitosamente",
+    "deleteConfirm": "¿Está seguro de eliminar este plan de venta?"
+  }
+}

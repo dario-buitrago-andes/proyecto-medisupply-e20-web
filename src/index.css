@@ -1,3 +1,6 @@
+/* Importar estilos de accesibilidad */
+@import './styles/accessibility.css';
+
 * {
   margin: 0;
   padding: 0;

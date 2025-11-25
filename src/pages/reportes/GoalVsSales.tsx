@@ -1,4 +1,5 @@
 import { Box, Typography, Paper, LinearProgress } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { KPI } from "./types";
 
 interface GoalVsSalesProps {
@@ -7,6 +8,8 @@ interface GoalVsSalesProps {
 }
 
 export default function GoalVsSales({ kpis, metaObjetivo }: GoalVsSalesProps) {
+  const { t } = useTranslation();
+  
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("es-CO", {
       style: "currency",
@@ -27,13 +30,13 @@ export default function GoalVsSales({ kpis, metaObjetivo }: GoalVsSalesProps) {
   return (
     <Box sx={{ mb: 4 }}>
       <Typography variant="h6" component="h3" gutterBottom sx={{ mb: 2 }}>
-        🎯 Meta vs Ventas
+        🎯 {t('reports:goalVsSales.title')}
       </Typography>
       <Paper sx={{ p: 3, boxShadow: 2 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Box>
             <Typography variant="body2" color="text.secondary">
-              Meta Objetivo
+              {t('reports:goalVsSales.goalTarget')}
             </Typography>
             <Typography variant="h6" sx={{ fontWeight: "bold", color: "text.primary" }}>
               {formatCurrency(metaObjetivo)}
@@ -41,7 +44,7 @@ export default function GoalVsSales({ kpis, metaObjetivo }: GoalVsSalesProps) {
           </Box>
           <Box sx={{ textAlign: "right" }}>
             <Typography variant="body2" color="text.secondary">
-              Ventas Totales
+              {t('reports:goalVsSales.totalSales')}
             </Typography>
             <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main" }}>
               {formatCurrency(kpis.ventas_totales)}
@@ -52,7 +55,7 @@ export default function GoalVsSales({ kpis, metaObjetivo }: GoalVsSalesProps) {
         <Box sx={{ mb: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
             <Typography variant="body2" color="text.secondary">
-              Progreso
+              {t('reports:goalVsSales.progress')}
             </Typography>
             <Typography 
               variant="body2" 
@@ -83,8 +86,8 @@ export default function GoalVsSales({ kpis, metaObjetivo }: GoalVsSalesProps) {
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Typography variant="body2" color="text.secondary">
             {isOverGoal 
-              ? `¡Superaste la meta por ${formatCurrency(kpis.ventas_totales - metaObjetivo)}!`
-              : `Faltan ${formatCurrency(metaObjetivo - kpis.ventas_totales)} para alcanzar la meta`
+              ? t('reports:goalVsSales.exceeded', { amount: formatCurrency(kpis.ventas_totales - metaObjetivo) })
+              : t('reports:goalVsSales.remaining', { amount: formatCurrency(metaObjetivo - kpis.ventas_totales) })
             }
           </Typography>
           <Typography 
@@ -94,7 +97,7 @@ export default function GoalVsSales({ kpis, metaObjetivo }: GoalVsSalesProps) {
               color: isOverGoal ? "success.main" : "text.secondary"
             }}
           >
-            {isOverGoal ? "✅ Meta Alcanzada" : "📈 En Progreso"}
+            {isOverGoal ? `✅ ${t('reports:goalVsSales.goalAchieved')}` : `📈 ${t('reports:goalVsSales.inProgress')}`}
           </Typography>
         </Box>
       </Paper>

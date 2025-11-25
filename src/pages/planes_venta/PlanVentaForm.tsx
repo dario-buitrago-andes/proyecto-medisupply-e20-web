@@ -12,6 +12,7 @@ import {
     OutlinedInput,
     Typography,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { PlanVentaService } from "../../services/planesVentaService";
 import { useEffect, useState } from "react";
 import { PaisesService, Pais } from "../../services/paisesService";
@@ -29,6 +30,7 @@ type ProductoItem = { id: number; nombre_producto: string };
 
 
 export default function PlanVentaForm() {
+    const { t } = useTranslation();
     const { notify } = useNotify();
     const [paises, setPaises] = useState<Pais[]>([]);
     const [vendedores, setVendedores] = useState<VendedorItem[]>([]);
@@ -71,12 +73,12 @@ export default function PlanVentaForm() {
 
     const onSubmit = async (data: any) => {
         if (Number(data.meta_monetaria_usd) <= 0) {
-            notify("La meta monetaria debe ser mayor a 0", "warning");
+            notify(t('salesPlans:validation.goalGreaterThanZero'), "warning");
             return;
         }
         try {
             await PlanVentaService.crear(data);
-            notify("Plan de venta creado correctamente", "success");
+            notify(t('salesPlans:messages.createSuccess'), "success");
         } catch (e) {
             notify(getApiErrorMessage(e), "error");
         }
@@ -89,15 +91,15 @@ export default function PlanVentaForm() {
             sx={{ maxWidth: 500, m: "auto", p: 2, display: "flex", flexDirection: "column" }}
         >
             <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3, textAlign: 'center' }}>
-                Registrar Plan de Venta
+                {t('salesPlans:create')}
             </Typography>
             {/* Vendedor */}
             <TextField
                 select
-                label="Vendedor"
+                label={t('salesPlans:fields.seller')}
                 {...register("vendedor_id", {
                     valueAsNumber: true,
-                    validate: (v) => (Number(v) > 0) || "El vendedor es obligatorio",
+                    validate: (v) => (Number(v) > 0) || t('salesPlans:validation.sellerRequired'),
                 })}
                 fullWidth
                 margin="normal"
@@ -105,7 +107,7 @@ export default function PlanVentaForm() {
                 helperText={errors.vendedor_id?.message as string}
             >
                 <MenuItem value={0} disabled>
-                    Selecciona un vendedor
+                    {t('salesPlans:placeholders.selectSeller')}
                 </MenuItem>
                 {vendedores.map((v) => (
                     <MenuItem key={v.id} value={v.id}>
@@ -117,10 +119,10 @@ export default function PlanVentaForm() {
             {/* Periodo */}
             <TextField
                 select
-                label="Periodo"
+                label={t('salesPlans:fields.period')}
                 {...register("periodo", {
-                    required: "El periodo es obligatorio",
-                    validate: (val) => (val && periodos.includes(val)) || "Seleccione un periodo válido",
+                    required: t('salesPlans:validation.periodRequired'),
+                    validate: (val) => (val && periodos.includes(val)) || t('salesPlans:validation.periodInvalid'),
                 })}
                 fullWidth
                 margin="normal"
@@ -136,15 +138,15 @@ export default function PlanVentaForm() {
 
             {/* Año */}
             <TextField
-                label="Año"
+                label={t('salesPlans:fields.year')}
                 type="number"
                 {...register("anio", {
-                    required: "El año es obligatorio",
+                    required: t('salesPlans:validation.yearRequired'),
                     validate: (value) => {
                         const year = Number(value);
-                        if (!Number.isInteger(year)) return "El año debe ser numérico";
-                        if (String(year).length !== 4) return "Debe tener 4 dígitos";
-                        if (year < 1900 || year > 2100) return "Año fuera de rango (1900–2100)";
+                        if (!Number.isInteger(year)) return t('salesPlans:validation.yearMustBeNumeric');
+                        if (String(year).length !== 4) return t('salesPlans:validation.yearMust4Digits');
+                        if (year < 1900 || year > 2100) return t('salesPlans:validation.yearOutOfRange');
                         return true;
                     },
                 })}
@@ -158,10 +160,10 @@ export default function PlanVentaForm() {
             {/* País */}
             <TextField
                 select
-                label="País"
+                label={t('salesPlans:fields.country')}
                 {...register("pais", {
                     valueAsNumber: true,
-                    validate: (v) => (Number(v) > 0) || "El país es obligatorio",
+                    validate: (v) => (Number(v) > 0) || t('salesPlans:validation.countryRequired'),
                 })}
                 fullWidth
                 margin="normal"
@@ -169,7 +171,7 @@ export default function PlanVentaForm() {
                 helperText={errors.pais?.message as string}
             >
                 <MenuItem value={0} disabled>
-                    Selecciona un país
+                    {t('salesPlans:placeholders.selectCountry')}
                 </MenuItem>
                 {paises.map((p) => (
                     <MenuItem key={p.id} value={p.id}>
@@ -180,16 +182,16 @@ export default function PlanVentaForm() {
 
             {/* Productos Objetivo (multi-select) */}
             <FormControl fullWidth margin="normal">
-                <InputLabel>Productos objetivo</InputLabel>
+                <InputLabel>{t('salesPlans:fields.targetProducts')}</InputLabel>
                 <Controller
                     name="productos_objetivo"
                     control={control}
-                    rules={{ required: "Debe seleccionar al menos un producto" }}
+                    rules={{ required: t('salesPlans:validation.productsRequired') }}
                     render={({ field }) => (
                         <Select
                             {...field}
                             multiple
-                            input={<OutlinedInput label="Productos objetivo" />}
+                            input={<OutlinedInput label={t('salesPlans:fields.targetProducts')} />}
                             renderValue={(selected) => (selected as number[]).map(id => productos.find(p => p.id === id)?.nombre_producto || id).join(", ")}
                         >
                             {productos.map((p) => (
@@ -213,12 +215,12 @@ export default function PlanVentaForm() {
                 name="meta_monetaria_usd"
                 control={control}
                 rules={{
-                    validate: (value) => Number(value) > 0 || "Debe ser un valor mayor a 0",
+                    validate: (value) => Number(value) > 0 || t('salesPlans:validation.goalMustBePositive'),
                 }}
                 render={({ field }) => (
                     <TextField
                         {...field}
-                        label="Meta monetaria (USD)"
+                        label={t('salesPlans:fields.monetaryGoal')}
                         fullWidth
                         margin="normal"
                         type="number"
@@ -249,7 +251,7 @@ export default function PlanVentaForm() {
                 sx={{ mt: 3 }}
                 color="primary"
             >
-                Guardar
+                {t('actions.save')}
             </Button>
         </Box>
     );

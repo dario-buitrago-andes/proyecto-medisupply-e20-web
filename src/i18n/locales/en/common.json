@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "MediSupply",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "welcome": "Welcome"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "back": "Back",
+    "changeLanguage": "Change language",
+    "submit": "Submit",
+    "close": "Close",
+    "view": "View",
+    "download": "Download"
+  },
+  "none": "None",
+  "navigation": {
+    "home": "Home",
+    "vendors": "Sellers",
+    "suppliers": "Suppliers",
+    "products": "Products",
+    "reports": "Reports",
+    "salesPlans": "Sales Plans",
+    "logout": "Logout",
+    "bulkUpload": "Bulk Upload"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email",
+    "minLength": "Minimum {{count}} characters",
+    "maxLength": "Maximum {{count}} characters",
+    "minValue": "Minimum value {{value}}",
+    "maxValue": "Maximum value {{value}}",
+    "invalidFormat": "Invalid format",
+    "mustBePositive": "Must be a positive number"
+  },
+  "accessibility": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainContent": "Main content",
+    "navigation": "Navigation",
+    "skipToMainContent": "Skip to main content",
+    "userMenu": "User menu",
+    "languageSelector": "Language selector"
+  },
+  "messages": {
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "operationSuccess": "Operation completed successfully",
+    "operationError": "Error performing operation",
+    "noData": "No data available",
+    "loading": "Loading data..."
+  }
+}

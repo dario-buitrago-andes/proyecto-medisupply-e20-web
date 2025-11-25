@@ -1,5 +1,6 @@
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { TrendingUp, ShoppingCart, TrackChanges, Schedule } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import { KPI } from "./types";
 
 interface KPICardsProps {
@@ -7,6 +8,8 @@ interface KPICardsProps {
 }
 
 export default function KPICards({ kpis }: KPICardsProps) {
+  const { t } = useTranslation();
+  
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("es-CO", {
       style: "currency",
@@ -20,26 +23,26 @@ export default function KPICards({ kpis }: KPICardsProps) {
 
   const kpiData = [
     {
-      title: "Ventas Totales",
+      title: t('reports:kpi.totalSales'),
       value: formatCurrency(kpis.ventas_totales),
       icon: <TrendingUp sx={{ fontSize: 40, color: "#4caf50" }} />,
       color: "#4caf50",
     },
     {
-      title: "Pedidos del Mes",
-      value: `${kpis.pedidos_mes} pedidos`,
+      title: t('reports:kpi.monthlyOrders'),
+      value: `${kpis.pedidos_mes} ${t('reports:kpi.orders')}`,
       icon: <ShoppingCart sx={{ fontSize: 40, color: "#2196f3" }} />,
       color: "#2196f3",
     },
     {
-      title: "Cumplimiento",
+      title: t('reports:kpi.goalCompletion'),
       value: formatPercentage(kpis.cumplimiento),
       icon: <TrackChanges sx={{ fontSize: 40, color: "#ff9800" }} />,
       color: "#ff9800",
     },
     {
-      title: "Tiempo Entrega Promedio",
-      value: `${kpis.tiempo_entrega_promedio_h} horas`,
+      title: t('reports:kpi.averageDeliveryTime'),
+      value: `${kpis.tiempo_entrega_promedio_h} ${t('reports:kpi.hours')}`,
       icon: <Schedule sx={{ fontSize: 40, color: "#9c27b0" }} />,
       color: "#9c27b0",
     },
