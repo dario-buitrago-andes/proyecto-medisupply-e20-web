@@ -75,7 +75,7 @@ jobs:
         run: npm run test:security || echo "⚠️ Tests de seguridad no disponibles aún"
 
       - name: Subir reporte de cobertura
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: coverage-report
@@ -169,7 +169,7 @@ jobs:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
 
       - name: Subir reportes E2E
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
@@ -177,7 +177,7 @@ jobs:
           retention-days: 30
 
       - name: Subir videos E2E
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-videos
@@ -215,7 +215,7 @@ jobs:
         continue-on-error: true
 
       - name: Subir reportes Lighthouse
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lighthouse-reports
