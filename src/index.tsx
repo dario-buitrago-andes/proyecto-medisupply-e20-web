@@ -5,11 +5,23 @@ import './styles/forms.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// Initialize MSW in development (optional, for API mocking during dev)
-if (process.env.NODE_ENV === 'development' && process.env.REACT_APP_USE_MSW === 'true') {
+// Initialize MSW in development or when running E2E tests
+// E2E tests need MSW to mock API calls
+const shouldUseMSW = 
+  (process.env.NODE_ENV === 'development' && process.env.REACT_APP_USE_MSW === 'true') ||
+  process.env.REACT_APP_E2E_TEST === 'true';
+
+if (shouldUseMSW) {
   import('./mocks/browser').then(({ worker }) => {
     worker.start({
-      onUnhandledRequest: 'bypass',
+      onUnhandledRequest: 'warn', // Warn instead of bypass for E2E tests
+      serviceWorker: {
+        url: '/mockServiceWorker.js',
+      },
+    }).then(() => {
+      console.log('✅ MSW started successfully for E2E tests');
+    }).catch((error) => {
+      console.warn('⚠️ MSW failed to start:', error);
     });
   });
 }
