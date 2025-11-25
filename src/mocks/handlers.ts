@@ -9,7 +9,23 @@ const API_URL = `${API_BASE}/api/v1`;
 
 export const handlers = [
   // Auth endpoints
+  // Support both /auth/login and /users/generate-token endpoints
   http.post(`${API_URL}/auth/login`, async ({ request }) => {
+    const body = await request.json() as { email: string; password: string };
+    
+    if (body.email === 'test@test.com' && body.password === 'password') {
+      return HttpResponse.json({
+        access_token: 'mock-jwt-token-12345'
+      });
+    }
+    
+    return HttpResponse.json(
+      { error: 'Invalid credentials' },
+      { status: 401 }
+    );
+  }),
+
+  http.post(`${API_URL}/users/generate-token`, async ({ request }) => {
     const body = await request.json() as { email: string; password: string };
     
     if (body.email === 'test@test.com' && body.password === 'password') {

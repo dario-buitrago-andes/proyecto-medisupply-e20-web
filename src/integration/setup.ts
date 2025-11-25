@@ -5,8 +5,10 @@
 import { server } from '../mocks/server';
 
 // Establish API mocking before all tests
+// Use 'warn' instead of 'error' to allow tests that hit real endpoints (like Postman mock)
+// This allows tests to work with both MSW mocks and real API endpoints
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
+  server.listen({ onUnhandledRequest: 'warn' });
 });
 
 // Reset any request handlers that are declared as a part of our tests
